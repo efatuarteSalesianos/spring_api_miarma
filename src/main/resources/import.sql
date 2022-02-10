@@ -1,0 +1,1 @@
+insert into User_Entity (id, direccion, telefono, avatar, password, full_name, email, role) values ('21b3d3704bc611ec81d30242ac130003', 'Mosquera de Figueroa, 46', '1928315614', 'https://image.freepik.com/vector-gratis/diseno-avatar-persona_24877-38137.jpg', '$2a$12$JRUsZdFgVgq7dlMT3YksKuCWULHdSQo1XrLevhNJIbA8kERasET7u', 'Ernesto Fatuarte', 'ernesto.fatuarte@gmail.com', 0);
