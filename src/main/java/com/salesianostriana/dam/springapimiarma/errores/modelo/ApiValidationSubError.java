@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.errores.modelo;
+package com.salesianostriana.dam.springapimiarma.errores.modelo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

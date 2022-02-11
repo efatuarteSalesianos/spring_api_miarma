@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.errores.modelo;
+package com.salesianostriana.dam.springapimiarma.errores.modelo;
 
 
 import org.springframework.boot.web.error.ErrorAttributeOptions;

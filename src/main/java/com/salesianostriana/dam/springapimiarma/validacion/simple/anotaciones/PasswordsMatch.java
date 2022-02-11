@@ -1,6 +1,6 @@
-package com.salesianostriana.dam.validacion.simple.anotaciones;
+package com.salesianostriana.dam.springapimiarma.validacion.simple.anotaciones;
 
-import com.salesianostriana.dam.validacion.simple.validadores.PasswordsMatchValidator;
+import com.salesianostriana.dam.springapimiarma.validacion.simple.validadores.PasswordsMatchValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

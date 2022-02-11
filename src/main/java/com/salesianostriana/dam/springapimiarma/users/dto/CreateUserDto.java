@@ -1,19 +1,25 @@
 package com.salesianostriana.dam.springapimiarma.users.dto;
 
+import com.salesianostriana.dam.springapimiarma.validacion.multiple.anotaciones.FieldsValueMatch;
+import com.salesianostriana.dam.springapimiarma.validacion.simple.anotaciones.StrongPassword;
 import lombok.*;
+import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor @AllArgsConstructor
-@com.salesianostriana.dam.validacion.multiple.anotaciones.FieldsValueMatch.List({
-        @com.salesianostriana.dam.validacion.multiple.anotaciones.FieldsValueMatch(
+@FieldsValueMatch.List({
+        @FieldsValueMatch(
                 field = "password",
                 fieldMatch = "verifyPassword",
                 message = "Las contraseñas no coinciden"
         ),
-        @com.salesianostriana.dam.validacion.multiple.anotaciones.FieldsValueMatch(
+        @FieldsValueMatch(
                 field = "email",
                 fieldMatch = "verifyEmail",
                 message = "Las direcciones de correo electrónico no coinciden"
@@ -21,16 +27,30 @@ import java.time.LocalDateTime;
 })
 public class CreateUserDto {
 
+    @NotBlank(message = "{userEntity.full_name.blank}")
+    @Size(min = 2, max = 32, message = "{userEntity.full_name.size}")
     private String full_name;
+
+    @Past(message = "{userEntity.fecha_nacimiento.past}")
     private LocalDateTime fecha_nacimiento;
+
+    @NotBlank(message = "{userEntity.direccion.blank}")
     private String direccion;
+
+    @NotBlank(message = "{userEntity.telefono.blank}")
     private String telefono;
+
+    @NotBlank(message = "{userEntity.email.blank}")
     private String email;
+    private String verifyEmail;
+
     private String nickname;
+
+    @URL
     private String avatar;
     @NotEmpty
-    @com.salesianostriana.dam.validacion.simple.anotaciones.StrongPassword(message = "{usuario.password.strong}", min = 5, max = 15, hasUpper = true, hasLower = true, hasNumber = true, hasAlpha = true, hasOthers = true)
+    @StrongPassword(message = "{usuario.password.strong}", min = 5, max = 15, hasUpper = true, hasLower = true, hasNumber = true, hasAlpha = true, hasOthers = true)
     private String password;
-    private String password2;
+    private String verifyPassword;
 
 }

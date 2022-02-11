@@ -1,4 +1,5 @@
-package com.salesianostriana.dam.errores.excepciones;
+package com.salesianostriana.dam.springapimiarma.errores.excepciones;
+
 
 public class SingleEntityNotFoundException extends EntityNotFoundException {
 

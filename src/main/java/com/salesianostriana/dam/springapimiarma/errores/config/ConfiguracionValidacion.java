@@ -1,6 +1,5 @@
-package com.salesianostriana.dam.errores.config;
+package com.salesianostriana.dam.springapimiarma.errores.config;
 
-import org.hibernate.validator.HibernateValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
-package com.salesianostriana.dam.validacion.simple.validadores;
+package com.salesianostriana.dam.springapimiarma.validacion.simple.validadores;
 
-import com.salesianostriana.dam.validacion.simple.anotaciones.PasswordsMatch;
+import com.salesianostriana.dam.springapimiarma.validacion.simple.anotaciones.PasswordsMatch;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.util.StringUtils;
 
@@ -22,9 +22,6 @@ public class PasswordsMatchValidator implements ConstraintValidator<PasswordsMat
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         String password = (String) PropertyAccessorFactory.forBeanPropertyAccess(value).getPropertyValue(passwordField);
         String verifyPassword = (String) PropertyAccessorFactory.forBeanPropertyAccess(value).getPropertyValue(verifyPasswordField);
-
         return StringUtils.hasText(password) && password.contentEquals(verifyPassword);
-
-
     }
 }

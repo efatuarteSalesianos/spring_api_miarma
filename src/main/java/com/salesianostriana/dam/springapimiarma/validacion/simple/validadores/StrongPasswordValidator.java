@@ -1,7 +1,6 @@
-package com.salesianostriana.dam.validacion.simple.validadores;
+package com.salesianostriana.dam.springapimiarma.validacion.simple.validadores;
 
-import com.salesianostriana.dam.validacion.simple.anotaciones.StrongPassword;
-import org.springframework.util.StringUtils;
+import com.salesianostriana.dam.springapimiarma.validacion.simple.anotaciones.StrongPassword;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

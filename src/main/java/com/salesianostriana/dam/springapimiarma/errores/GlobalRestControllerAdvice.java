@@ -1,9 +1,9 @@
-package com.salesianostriana.dam.errores;
+package com.salesianostriana.dam.springapimiarma.errores;
 
-import com.salesianostriana.dam.errores.excepciones.EntityNotFoundException;
-import com.salesianostriana.dam.errores.modelo.ApiError;
-import com.salesianostriana.dam.errores.modelo.ApiSubError;
-import com.salesianostriana.dam.errores.modelo.ApiValidationSubError;
+import com.salesianostriana.dam.springapimiarma.errores.excepciones.EntityNotFoundException;
+import com.salesianostriana.dam.springapimiarma.errores.modelo.ApiError;
+import com.salesianostriana.dam.springapimiarma.errores.modelo.ApiSubError;
+import com.salesianostriana.dam.springapimiarma.errores.modelo.ApiValidationSubError;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -45,9 +45,7 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
                                 .build())
                         .collect(Collectors.toList())
                 );
-
     }
-
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -81,12 +79,7 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
                                 .build()
                 );
             }
-
-
         });
-
-
-
         return buildApiErrorWithSubError(HttpStatus.BAD_REQUEST, "Errores varios en la validación",
                 request,
                 /*ex.getFieldErrors()
@@ -107,11 +100,9 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
         return buildApiErrorStatus(status, ex, request);
     }
 
-
     private ResponseEntity<Object> buildApiError400(Exception ex, WebRequest request) {
         return buildApiErrorStatus(HttpStatus.BAD_REQUEST, ex, request);
     }
-
 
     private ResponseEntity<Object> buildApiError404(Exception ex, WebRequest request) {
         return buildApiErrorStatus(HttpStatus.NOT_FOUND, ex, request);
@@ -129,6 +120,4 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
                 .body(new ApiError(estado, mensaje, ((ServletWebRequest) request).getRequest().getRequestURI(), subErrores));
 
     }
-
-
 }

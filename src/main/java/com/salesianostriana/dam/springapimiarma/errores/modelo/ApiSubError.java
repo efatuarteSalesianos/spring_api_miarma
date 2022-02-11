@@ -1,6 +1,4 @@
-package com.salesianostriana.dam.errores.modelo;
-
-import lombok.experimental.SuperBuilder;
+package com.salesianostriana.dam.springapimiarma.errores.modelo;
 
 public abstract class ApiSubError {
 }

@@ -1,6 +1,6 @@
-package com.salesianostriana.dam.validacion.multiple.anotaciones;
+package com.salesianostriana.dam.springapimiarma.validacion.multiple.anotaciones;
 
-import com.salesianostriana.dam.validacion.multiple.validadores.FieldsValueMatchValidator;
+import com.salesianostriana.dam.springapimiarma.validacion.multiple.validadores.FieldsValueMatchValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
