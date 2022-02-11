@@ -6,11 +6,12 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -38,19 +39,30 @@ public class UserEntity implements UserDetails, Serializable {
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "UUID")
     private UUID id;
 
-    private String direccion, telefono, avatar, password, full_name;
+    private String full_name, direccion, telefono, nickname, avatar, password;
+
+    private LocalDateTime fecha_nacimiento;
 
     @NaturalId
     @Column(unique = true, updatable = false)
     private String email;
 
+    private ProfileType privacidad;
 
-    @OneToMany(mappedBy = "propietario", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<Post> viviendas = new ArrayList<>();
+    @ManyToOne
+    private List<Post> posts = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Post", foreignKey = @ForeignKey(name = "FK_GESTOR_Post"), nullable = true)
-    private Post Post;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "usuario_id",
+            foreignKey = @ForeignKey(name="FK_MATRICULA_ALUMNO")),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id",
+                    foreignKey = @ForeignKey(name="FK_MATRICULA_ASIGNATURA")),
+            name = "solicitudes_seguimiento"
+    )
+    List<UserEntity> seguidores = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "seguidores", fetch = FetchType.EAGER)
+    private List<UserEntity> seguidos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -59,7 +71,7 @@ public class UserEntity implements UserDetails, Serializable {
 
     @Override
     public String getUsername() {
-        return email;
+        return nickname;
     }
 
     @Override

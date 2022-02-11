@@ -3,6 +3,7 @@ package com.salesianostriana.dam.springapimiarma.model;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -32,11 +33,12 @@ public class Post implements Serializable {
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "UUID")
     private UUID id;
 
-    private String descripcion;
+    private String titulo, descripcion, media;
+
+    @CreatedDate
+    private LocalDateTime fechaPublicacion;
 
     private PostType tipo;
-
-    private LocalDateTime fechaPublicacion;
 
     @Builder.Default
     @OneToMany(mappedBy = "Post", orphanRemoval = true, cascade = CascadeType.REMOVE)
