@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.URL;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
@@ -42,12 +43,14 @@ public class CreateUserDto {
     private String email;
     private String verifyEmail;
 
+    @NotBlank(message = "{userEntity.nickname.blank}")
+    @Size(min = 2, max = 20, message = "{userEntity.nickname.size}")
     private String nickname;
 
     @URL
     private String avatar;
     @NotEmpty
-    @StrongPassword(message = "{usuario.password.strong}", min = 5, max = 15, hasUpper = true, hasLower = true, hasNumber = true, hasAlpha = true, hasOthers = true)
+    @StrongPassword(message = "{userEntity.password.strong}", min = 5, max = 15, hasUpper = true, hasLower = true, hasNumber = true, hasAlpha = true, hasOthers = true)
     private String password;
     private String verifyPassword;
 
