@@ -49,6 +49,7 @@ public class CreateUserDto {
 
     @URL
     private String avatar;
+
     @NotEmpty
     @StrongPassword(message = "{userEntity.password.strong}", min = 5, max = 15, hasUpper = true, hasLower = true, hasNumber = true, hasAlpha = true, hasOthers = true)
     private String password;

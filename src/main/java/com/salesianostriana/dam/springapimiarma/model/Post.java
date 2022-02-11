@@ -3,19 +3,18 @@ package com.salesianostriana.dam.springapimiarma.model;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
+@Builder
 public class Post implements Serializable {
 
     @Id
@@ -24,7 +23,7 @@ public class Post implements Serializable {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator",
             parameters = {
-                    @org.hibernate.annotations.Parameter(
+                    @Parameter(
                             name = "uuid_gen_strategy_class",
                             value = "org.hibernate.id.uuid.CustomVersionOneStrategy"
                     )
@@ -40,7 +39,6 @@ public class Post implements Serializable {
 
     private PostType tipo;
 
-    @Builder.Default
     @OneToMany(mappedBy = "Post", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private UserEntity propietario;
 }

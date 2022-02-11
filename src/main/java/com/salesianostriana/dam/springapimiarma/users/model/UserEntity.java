@@ -52,10 +52,10 @@ public class UserEntity implements UserDetails, Serializable {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "usuario_id",
-            foreignKey = @ForeignKey(name="FK_MATRICULA_ALUMNO")),
+            foreignKey = @ForeignKey(name="FK_SOLICITUD_SEGUIDOR")),
             inverseJoinColumns = @JoinColumn(name = "usuario_id",
-                    foreignKey = @ForeignKey(name="FK_MATRICULA_ASIGNATURA")),
-            name = "solicitudes_seguimiento"
+                    foreignKey = @ForeignKey(name="FK_SOLICITUD_SEGUIMIENTO")),
+            name = "solicitudes"
     )
     List<UserEntity> seguidores = new ArrayList<>();
 

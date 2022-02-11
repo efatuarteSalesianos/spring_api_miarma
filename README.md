@@ -36,3 +36,4 @@ Para este proyecto hemos instalado las siguientes dependencias:
 - Lombok
 - Spring Web
 - Spring Security
+- Spring Validation

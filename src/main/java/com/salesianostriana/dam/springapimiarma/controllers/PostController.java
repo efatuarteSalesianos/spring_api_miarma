@@ -101,7 +101,7 @@ public class PostController {
                     content = @Content)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<GetPostDto> buscarPost(@Parameter(description = "El id de la Post que se busca") @PathVariable Long id) {
+    public ResponseEntity<GetPostDto> buscarPost(@Parameter(description = "El id de la Post que se busca") @PathVariable UUID id) {
         return ResponseEntity
                 .of(this.service.findById(id)
                 .map(dtoConverter::PostToGetPostDto));
@@ -121,7 +121,7 @@ public class PostController {
                     content = @Content)
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@Parameter(description = "El id de la Post que se desea borrar") @PathVariable Long id) {
+    public ResponseEntity<?> deletePost(@Parameter(description = "El id de la Post que se desea borrar") @PathVariable UUID id) {
 
         Optional<Post> inmo = service.findById(id);
 

@@ -16,6 +16,6 @@ public interface UserEntityRepository extends JpaRepository<UserEntity, UUID> {
 
     @Query("select u from UserEntity u left join u.Post i where i.id = :PostId")
     @EntityGraph(value = "grafo-gestor-con-Post", type = EntityGraph.EntityGraphType.FETCH)
-    List<UserEntity> findByPostIdUsingQuery(@Param("PostId") Long PostId);
+    List<UserEntity> findByPostIdUsingQuery(@Param("PostId") UUID PostId);
 
 }

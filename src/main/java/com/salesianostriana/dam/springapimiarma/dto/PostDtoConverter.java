@@ -12,29 +12,26 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostDtoConverter {
 
-    private final ViviendaDtoConverter viviendaDtoConverter;
     private final UserDtoConverter userDtoConverter;
 
-    public Post createPostDtoToPost(CreatePostDto Post) {
-        return Post
-                .builder()
-                .nombre(Post.getNombre())
-                .email(Post.getEmail())
-                .telefono(Post.getTelefono())
-                .avatar(Post.getAvatar())
+    public Post createPostDtoToPost(CreatePostDto post) {
+        return Post.builder()
+                .titulo(post.getTitulo())
+                .descripcion(post.getDescripcion())
+                .media(post.getMedia())
+                .tipo(post.getTipo())
                 .build();
     }
 
-    public GetPostDto PostToGetPostDto(Post i) {
+    public GetPostDto PostToGetPostDto(Post p) {
         return GetPostDto
                 .builder()
-                .id(i.getId())
-                .nombre(i.getNombre())
-                .email(i.getEmail())
-                .telefono(i.getTelefono())
-                .avatar(i.getAvatar())
-                .viviendas(i.getViviendas().stream().map(viviendaDtoConverter::viviendaToGetViviendaDto).collect(Collectors.toList()))
-                .gestores(i.getGestores().stream().map(userDtoConverter::convertUserEntityToGetUserDto).collect(Collectors.toList()))
+                .id(p.getId())
+                .titulo(p.getTitulo())
+                .descripcion(p.getDescripcion())
+                .media(p.getMedia())
+                .tipo(p.getTipo())
+                .propietario(userDtoConverter(p.getPropietario()))
                 .build();
     }
 }

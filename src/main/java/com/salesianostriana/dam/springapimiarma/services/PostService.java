@@ -8,9 +8,11 @@ import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
-public class PostService extends BaseService<Post, Long, PostRepository> {
+public class PostService extends BaseService<Post, UUID, PostRepository> {
 
     private final PostDtoConverter dtoConverter;
 
