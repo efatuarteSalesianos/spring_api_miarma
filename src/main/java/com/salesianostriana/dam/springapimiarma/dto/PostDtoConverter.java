@@ -1,6 +1,6 @@
 package com.salesianostriana.dam.springapimiarma.dto;
 
-import com.salesianostriana.dam.springapimiarma.model.Inmobiliaria;
+import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.model.Vivienda;
 import com.salesianostriana.dam.springapimiarma.users.dto.UserDtoConverter;
 import lombok.RequiredArgsConstructor;
@@ -10,23 +10,23 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class InmobiliariaDtoConverter {
+public class PostDtoConverter {
 
     private final ViviendaDtoConverter viviendaDtoConverter;
     private final UserDtoConverter userDtoConverter;
 
-    public Inmobiliaria createInmobiliariaDtoToInmobiliaria(CreateInmobiliariaDto inmobiliaria) {
-        return Inmobiliaria
+    public Post createPostDtoToPost(CreatePostDto Post) {
+        return Post
                 .builder()
-                .nombre(inmobiliaria.getNombre())
-                .email(inmobiliaria.getEmail())
-                .telefono(inmobiliaria.getTelefono())
-                .avatar(inmobiliaria.getAvatar())
+                .nombre(Post.getNombre())
+                .email(Post.getEmail())
+                .telefono(Post.getTelefono())
+                .avatar(Post.getAvatar())
                 .build();
     }
 
-    public GetInmobiliariaDto inmobiliariaToGetInmobiliariaDto(Inmobiliaria i) {
-        return GetInmobiliariaDto
+    public GetPostDto PostToGetPostDto(Post i) {
+        return GetPostDto
                 .builder()
                 .id(i.getId())
                 .nombre(i.getNombre())

@@ -1,8 +1,6 @@
 package com.salesianostriana.dam.springapimiarma.users.model;
 
-import com.salesianostriana.dam.springapimiarma.model.Inmobiliaria;
-import com.salesianostriana.dam.springapimiarma.model.Interesa;
-import com.salesianostriana.dam.springapimiarma.model.Vivienda;
+import com.salesianostriana.dam.springapimiarma.model.Post;
 import org.hibernate.annotations.Parameter;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -18,95 +16,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-@NamedEntityGraph(
-        name = "grafo-propietario-con-viviendas",
-        attributeNodes = {
-                @NamedAttributeNode(value = "full_name"),
-                @NamedAttributeNode(value = "direccion"),
-                @NamedAttributeNode(value = "telefono"),
-                @NamedAttributeNode(value = "avatar"),
-                @NamedAttributeNode(value = "viviendas", subgraph = "subgrafo-viviendas")
-        },
-        subgraphs = {
-                @NamedSubgraph(
-                        name = "subgrafo-viviendas",
-                        attributeNodes = {
-                                @NamedAttributeNode("titulo"),
-                                @NamedAttributeNode("latlng"),
-                                @NamedAttributeNode("direccion"),
-                                @NamedAttributeNode("poblacion"),
-                                @NamedAttributeNode("provincia"),
-                                @NamedAttributeNode("descripcion"),
-                                @NamedAttributeNode("avatar"),
-                                @NamedAttributeNode("codigoPostal"),
-                                @NamedAttributeNode("numHabitaciones"),
-                                @NamedAttributeNode("metrosCuadrados"),
-                                @NamedAttributeNode("numBanyos"),
-                                @NamedAttributeNode("tipo"),
-                                @NamedAttributeNode("precio"),
-                        })
-        }
-)
-
-@NamedEntityGraph(
-        name = "grafo-gestor-con-inmobiliaria",
-        attributeNodes = {
-                @NamedAttributeNode(value = "full_name"),
-                @NamedAttributeNode(value = "direccion"),
-                @NamedAttributeNode(value = "telefono"),
-                @NamedAttributeNode(value = "avatar"),
-                @NamedAttributeNode(value = "inmobiliaria", subgraph = "subgrafo-inmobiliaria")
-        },
-        subgraphs = {
-                @NamedSubgraph(
-                        name = "subgrafo-inmobiliaria",
-                        attributeNodes = {
-                                @NamedAttributeNode("nombre"),
-                                @NamedAttributeNode("email"),
-                                @NamedAttributeNode("telefono"),
-                                @NamedAttributeNode("avatar"),
-                        })
-        }
-)
-
-@NamedEntityGraph(
-        name = "grafo-propietario-con-viviendas-e-intereses",
-        attributeNodes = {
-                @NamedAttributeNode(value = "full_name"),
-                @NamedAttributeNode(value = "direccion"),
-                @NamedAttributeNode(value = "telefono"),
-                @NamedAttributeNode(value = "avatar"),
-                @NamedAttributeNode(value = "viviendas", subgraph = "subgrafo-viviendas")
-        },
-        subgraphs = {
-                @NamedSubgraph(
-                name = "subgrafo-viviendas",
-                attributeNodes = {
-                        @NamedAttributeNode("titulo"),
-                        @NamedAttributeNode("latlng"),
-                        @NamedAttributeNode("direccion"),
-                        @NamedAttributeNode("poblacion"),
-                        @NamedAttributeNode("provincia"),
-                        @NamedAttributeNode("descripcion"),
-                        @NamedAttributeNode("avatar"),
-                        @NamedAttributeNode("codigoPostal"),
-                        @NamedAttributeNode("numHabitaciones"),
-                        @NamedAttributeNode("metrosCuadrados"),
-                        @NamedAttributeNode("numBanyos"),
-                        @NamedAttributeNode("tipo"),
-                        @NamedAttributeNode("precio"),
-                        @NamedAttributeNode(value = "intereses", subgraph = "subgrafo-intereses")
-                }),
-                @NamedSubgraph(
-                        name = "subgrafo-intereses",
-                        attributeNodes = {
-                                @NamedAttributeNode("interesado"),
-                                @NamedAttributeNode("createdDate"),
-                                @NamedAttributeNode("mensaje")
-                        }
-                )
-        }
-)
 @Table(name = "User_Entity")
 @Entity
 @AllArgsConstructor @NoArgsConstructor
@@ -135,21 +44,17 @@ public class UserEntity implements UserDetails, Serializable {
     @Column(unique = true, updatable = false)
     private String email;
 
-    private UserRoles role;
 
     @OneToMany(mappedBy = "propietario", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<Vivienda> viviendas = new ArrayList<>();
+    private List<Post> viviendas = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "inmobiliaria", foreignKey = @ForeignKey(name = "FK_GESTOR_INMOBILIARIA"), nullable = true)
-    private Inmobiliaria inmobiliaria;
-
-    @OneToMany(mappedBy = "interesado", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<Interesa> intereses = new ArrayList<>();
+    @JoinColumn(name = "Post", foreignKey = @ForeignKey(name = "FK_GESTOR_Post"), nullable = true)
+    private Post Post;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        return null;
     }
 
     @Override
@@ -175,17 +80,5 @@ public class UserEntity implements UserDetails, Serializable {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    /* HELPERS CON INMOBILIARIA */
-
-    public void addToInmobiliaria(Inmobiliaria i){
-        this.inmobiliaria = i;
-        i.getGestores().add(this);
-    }
-
-    public void removeFromInmobiliaria(Inmobiliaria i){
-        i.getGestores().remove(this);
-        this.inmobiliaria = null;
     }
 }

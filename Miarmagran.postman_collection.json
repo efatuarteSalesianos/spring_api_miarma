@@ -508,7 +508,7 @@
 					"response": []
 				},
 				{
-					"name": "06 - Asignar Inmobiliaria a Vivienda",
+					"name": "06 - Asignar Post a Vivienda",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -523,7 +523,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/vivienda/4/inmobiliaria/2",
+							"raw": "http://localhost:8080/vivienda/4/Post/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -532,7 +532,7 @@
 							"path": [
 								"vivienda",
 								"4",
-								"inmobiliaria",
+								"Post",
 								"2"
 							]
 						}
@@ -540,7 +540,7 @@
 					"response": []
 				},
 				{
-					"name": "07 - Eliminar Inmobiliaria de Vivienda",
+					"name": "07 - Eliminar Post de Vivienda",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -555,7 +555,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/vivienda/1/inmobiliaria/",
+							"raw": "http://localhost:8080/vivienda/1/Post/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -564,7 +564,7 @@
 							"path": [
 								"vivienda",
 								"1",
-								"inmobiliaria",
+								"Post",
 								""
 							]
 						}
@@ -600,10 +600,10 @@
 			]
 		},
 		{
-			"name": "Inmobiliarias",
+			"name": "Posts",
 			"item": [
 				{
-					"name": "01 - Crear Inmobiliaria",
+					"name": "01 - Crear Post",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -627,14 +627,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/",
+							"raw": "http://localhost:8080/Post/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"inmobiliaria",
+								"Post",
 								""
 							]
 						}
@@ -666,14 +666,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/1/gestor",
+							"raw": "http://localhost:8080/Post/1/gestor",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"inmobiliaria",
+								"Post",
 								"1",
 								"gestor"
 							]
@@ -697,14 +697,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/gestor/c0a80163-7d57-15c3-817d-57a74f4d0000",
+							"raw": "http://localhost:8080/Post/gestor/c0a80163-7d57-15c3-817d-57a74f4d0000",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"inmobiliaria",
+								"Post",
 								"gestor",
 								"c0a80163-7d57-15c3-817d-57a74f4d0000"
 							]
@@ -713,7 +713,7 @@
 					"response": []
 				},
 				{
-					"name": "04 - Mostrar Gestores de Inmobiliaria",
+					"name": "04 - Mostrar Gestores de Post",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -728,14 +728,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/gestores",
+							"raw": "http://localhost:8080/Post/gestores",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"inmobiliaria",
+								"Post",
 								"gestores"
 							]
 						}
@@ -743,14 +743,14 @@
 					"response": []
 				},
 				{
-					"name": "05 - Listar Inmobiliarias",
+					"name": "05 - Listar Posts",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var jsonDataInmobiliarias = JSON.parse(responseBody);\r",
-									"pm.collectionVariables.set(\"inmobiliariaId\", jsonDataInmobiliarias[0].id);"
+									"var jsonDataPosts = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"PostId\", jsonDataPosts[0].id);"
 								],
 								"type": "text/javascript"
 							}
@@ -760,14 +760,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/",
+							"raw": "http://localhost:8080/Post/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"inmobiliaria",
+								"Post",
 								""
 							]
 						}
@@ -775,27 +775,27 @@
 					"response": []
 				},
 				{
-					"name": "06 - Buscar Inmobiliaria",
+					"name": "06 - Buscar Post",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/{{inmobiliariaId}}",
+							"raw": "http://localhost:8080/Post/{{PostId}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"inmobiliaria",
-								"{{inmobiliariaId}}"
+								"Post",
+								"{{PostId}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "07 - Eliminar Inmobiliaria",
+					"name": "07 - Eliminar Post",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -810,14 +810,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/1",
+							"raw": "http://localhost:8080/Post/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"inmobiliaria",
+								"Post",
 								"1"
 							]
 						}
@@ -830,14 +830,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/1/gestores",
+							"raw": "http://localhost:8080/Post/1/gestores",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"inmobiliaria",
+								"Post",
 								"1",
 								"gestores"
 							]
@@ -1002,7 +1002,7 @@
 			"value": ""
 		},
 		{
-			"key": "inmobiliariaId",
+			"key": "PostId",
 			"value": ""
 		}
 	]

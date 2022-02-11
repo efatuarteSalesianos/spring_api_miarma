@@ -1,9 +1,8 @@
 package com.salesianostriana.dam.springapimiarma.users.controllers;
 
-import com.salesianostriana.dam.springapimiarma.model.Inmobiliaria;
+import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.users.dto.*;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
-import com.salesianostriana.dam.springapimiarma.users.model.UserRoles;
 import com.salesianostriana.dam.springapimiarma.users.services.UserEntityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,7 +35,7 @@ public class UserController {
             @ApiResponse(responseCode = "201",
                     description = "Se ha creado correctamente",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Inmobiliaria.class))}),
+                            schema = @Schema(implementation = Post.class))}),
             @ApiResponse(responseCode = "400",
                     description = "Hay un error en los datos",
                     content = @Content),
@@ -45,75 +44,13 @@ public class UserController {
                     content = @Content)
     })
     @PostMapping("/auth/register/{role}")
-    public ResponseEntity<GetUserDto> newUser(@Parameter(description = "El cuerpo con los atributos del nuevo usuario") @RequestBody CreateUserDto newUser, @Parameter(description = "El rol del nuevo usuario") @PathVariable UserRoles role) {
-        UserRoles.valueOf("propietario".toUpperCase());
-        UserEntity saved = userEntityService.save(newUser, role);
+    public ResponseEntity<GetUserDto> newUser(@Parameter(description = "El cuerpo con los atributos del nuevo usuario") @RequestBody CreateUserDto newUser) {
+        UserEntity saved = userEntityService.save(newUser);
 
         if(saved == null)
             return ResponseEntity.badRequest().build();
         else
             return ResponseEntity.status(HttpStatus.CREATED).body(userDtoConverter.convertUserEntityToGetUserDto(saved));
-    }
-
-    @Operation(summary = "Se muestra un listado de todos los interesados")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Se muestra correctamente el listado",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserEntity.class))}),
-            @ApiResponse(responseCode = "404",
-                    description = "No hay interesados",
-                    content = @Content),
-            @ApiResponse(responseCode = "403",
-                    description = "Acceso denegado",
-                    content = @Content)
-    })
-    @GetMapping("/interesado/")
-    public ResponseEntity<List<GetPropietarioDto>> listarInteresados() {
-        List<GetPropietarioDto> interesados = userEntityService.findInteresados()
-                .stream()
-                .map(userDtoConverter::convertUserEntityToGetPropietarioDto).collect(Collectors.toList());
-        if(interesados.isEmpty())
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        return ResponseEntity
-                .ok()
-                .body(interesados);
-    }
-
-    @Operation(summary = "Se muestra la información de un interesado")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Se muestra correctamente la información",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserEntity.class))}),
-            @ApiResponse(responseCode = "404",
-                    description = "No se encuentra el interesado con el id",
-                    content = @Content),
-            @ApiResponse(responseCode = "403",
-                    description = "Acceso denegado",
-                    content = @Content)
-    })
-    @GetMapping("/interesado/{id}")
-    public ResponseEntity<GetPropietarioDto> buscarInteresado(@Parameter(description = "El id del interesado que se busca") @PathVariable UUID interesadoId, @AuthenticationPrincipal UserEntity user) {
-        Optional<UserEntity> interesado = userEntityService.findById(interesadoId);
-        if(interesado.isEmpty())
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        if((user.getRole().equals(UserRoles.PROPIETARIO) && user.getId().equals(interesadoId)) || user.getRole().equals(UserRoles.ADMIN)) {
-            if (userEntityService.findInteresados().contains(interesado.get()))
-                return ResponseEntity
-                        .ok()
-                        .body(userDtoConverter.convertUserEntityToGetPropietarioDto(interesado.get()));
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        }
-        return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
-                .build();
     }
 
 }
