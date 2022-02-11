@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.URL;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
@@ -28,7 +27,6 @@ import java.time.LocalDateTime;
 public class CreateUserDto {
 
     @NotBlank(message = "{userEntity.full_name.blank}")
-    @Size(min = 2, max = 32, message = "{userEntity.full_name.size}")
     private String full_name;
 
     @Past(message = "{userEntity.fecha_nacimiento.past}")

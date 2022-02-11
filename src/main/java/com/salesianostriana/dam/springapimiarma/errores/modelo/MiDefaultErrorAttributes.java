@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.springapimiarma.errores.modelo;
 
-
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.http.HttpStatus;
