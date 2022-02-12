@@ -1,8 +1,11 @@
-package com.salesianostriana.dam.springapimiarma.users.dto;
+package com.salesianostriana.dam.springapimiarma.users.controllers.dto;
 
+import com.salesianostriana.dam.springapimiarma.users.model.ProfileType;
 import com.salesianostriana.dam.springapimiarma.validacion.multiple.anotaciones.FieldsValueMatch;
 import com.salesianostriana.dam.springapimiarma.validacion.simple.anotaciones.StrongPassword;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotBlank;
@@ -50,9 +53,12 @@ public class CreateUserDto {
     @URL
     private String avatar;
 
-    @NotEmpty
+    @NotEmpty(message = "{userEntity.password.empty}")
     @StrongPassword(message = "{userEntity.password.strong}", min = 5, max = 15, hasUpper = true, hasLower = true, hasNumber = true, hasAlpha = true, hasOthers = true)
     private String password;
     private String verifyPassword;
+
+    @NotBlank(message = "{userEntity.privacidad.blank}")
+    private ProfileType privacidad;
 
 }

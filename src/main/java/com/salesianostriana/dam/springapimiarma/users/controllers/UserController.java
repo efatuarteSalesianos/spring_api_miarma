@@ -1,7 +1,9 @@
 package com.salesianostriana.dam.springapimiarma.users.controllers;
 
 import com.salesianostriana.dam.springapimiarma.model.Post;
-import com.salesianostriana.dam.springapimiarma.users.dto.*;
+import com.salesianostriana.dam.springapimiarma.users.controllers.dto.CreateUserDto;
+import com.salesianostriana.dam.springapimiarma.users.controllers.dto.GetUserDto;
+import com.salesianostriana.dam.springapimiarma.users.controllers.dto.UserDtoConverter;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import com.salesianostriana.dam.springapimiarma.users.services.UserEntityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,13 +16,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor

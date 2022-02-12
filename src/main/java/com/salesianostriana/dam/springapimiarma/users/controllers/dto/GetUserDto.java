@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.springapimiarma.users.dto;
+package com.salesianostriana.dam.springapimiarma.users.controllers.dto;
 
 import com.salesianostriana.dam.springapimiarma.dto.GetPostDto;
 import com.salesianostriana.dam.springapimiarma.users.model.ProfileType;

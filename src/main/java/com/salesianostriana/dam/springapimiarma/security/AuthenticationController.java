@@ -1,9 +1,10 @@
 package com.salesianostriana.dam.springapimiarma.security;
 
 import com.salesianostriana.dam.springapimiarma.model.Vivienda;
+import com.salesianostriana.dam.springapimiarma.security.dto.JwtUserConverter;
+import com.salesianostriana.dam.springapimiarma.security.dto.LoginDto;
 import com.salesianostriana.dam.springapimiarma.security.jwt.JwtProvider;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
-import com.salesianostriana.dam.springapimiarma.security.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

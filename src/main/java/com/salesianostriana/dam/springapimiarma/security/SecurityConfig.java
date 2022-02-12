@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.springapimiarma.security;
 
-import com.salesianostriana.dam.springapimiarma.security.jwt.*;
+import com.salesianostriana.dam.springapimiarma.security.jwt.JwtAccessDeniedHandler;
+import com.salesianostriana.dam.springapimiarma.security.jwt.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

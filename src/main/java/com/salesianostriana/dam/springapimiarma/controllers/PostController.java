@@ -1,11 +1,9 @@
 package com.salesianostriana.dam.springapimiarma.controllers;
 
-import com.salesianostriana.dam.springapimiarma.dto.CreatePostDto;
-import com.salesianostriana.dam.springapimiarma.dto.GetPostDto;
-import com.salesianostriana.dam.springapimiarma.dto.PostDtoConverter;
+import com.salesianostriana.dam.springapimiarma.dto.*;
 import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.services.PostService;
-import com.salesianostriana.dam.springapimiarma.users.dto.UserDtoConverter;
+import com.salesianostriana.dam.springapimiarma.users.controllers.dto.UserDtoConverter;
 import com.salesianostriana.dam.springapimiarma.users.services.UserEntityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,13 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/Post")
+@RequestMapping("/post")
 @Tag(name="Post", description = "Clase controladora de Posts")
 public class PostController {
 
@@ -34,7 +32,7 @@ public class PostController {
     private final UserDtoConverter userDtoConverter;
     private final PostDtoConverter dtoConverter;
 
-    @Operation(summary = "Se añade una Post")
+    @Operation(summary = "Se añade un Post")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
                     description = "Se ha creado correctamente",
@@ -48,18 +46,11 @@ public class PostController {
                     content = @Content)
     })
     @PostMapping("/")
-    public ResponseEntity<CreatePostDto> nuevoPost(@RequestBody CreatePostDto nuevaPost) {
-
-        service.save(nuevaPost);
-
-        if(nuevaPost.getNombre().isEmpty())
-            return ResponseEntity.badRequest().build();
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(nuevaPost);
+    public ResponseEntity<Post> nuevoPost(@Valid @RequestBody CreatePostDto nuevoPost) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(nuevoPost));
     }
 
-    @Operation(summary = "Se muestra un listado con todas las Posts")
+    @Operation(summary = "Se muestra un listado con todos los Posts")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se muestra la lista correctamente",
@@ -73,67 +64,65 @@ public class PostController {
                     content = @Content)
     })
     @GetMapping("/")
-    public ResponseEntity<List<GetPostDto>> listarPosts() {
-        List <GetPostDto> Posts = service.findAll()
-                .stream()
-                .map(dtoConverter::PostToGetPostDto)
-                .collect(Collectors.toList());
-        if(Posts.isEmpty())
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        return ResponseEntity
-                .ok()
-                .body(Posts);
+    public List<GetPostListDto> listarPosts() {
+        return service.findAllPosts();
     }
 
-    @Operation(summary = "Se muestran los detalles de una Post")
+    @Operation(summary = "Se muestran los detalles de un Post")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Se muestra la Post correctamente",
+                    description = "Se muestra el Post correctamente",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Post.class))}),
             @ApiResponse(responseCode = "404",
-                    description = "No existe la Post que se está buscando",
+                    description = "No existe el Post que se está buscando",
                     content = @Content),
             @ApiResponse(responseCode = "403",
                     description = "Acceso denegado",
                     content = @Content)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<GetPostDto> buscarPost(@Parameter(description = "El id de la Post que se busca") @PathVariable UUID id) {
-        return ResponseEntity
-                .of(this.service.findById(id)
-                .map(dtoConverter::PostToGetPostDto));
+    public GetPostDto buscarPost(@Parameter(description = "El id del Post que se busca") @PathVariable UUID id) {
+        return service.findPostById(id);
+
     }
 
-    @Operation(summary = "Se borra una Post")
+    @Operation(summary = "Se editan los detalles de un Post")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se muestra el Post correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Post.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "No existe el Post que se está buscando",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Acceso denegado",
+                    content = @Content)
+    })
+    @GetMapping("/{id}")
+    public GetPostDto editarPost(@Parameter(description = "El id del Post que se busca") @PathVariable UUID id, @Valid @RequestBody SavePostDto post) {
+        return service.edit(id, post);
+
+    }
+
+    @Operation(summary = "Se borra un Post")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
                     description = "Se ha borrado correctamente",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Post.class))}),
             @ApiResponse(responseCode = "404",
-                    description = "No existe la Post que se está buscando",
+                    description = "No existe el Post que se está buscando",
                     content = @Content),
             @ApiResponse(responseCode = "403",
                     description = "Acceso denegado",
                     content = @Content)
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@Parameter(description = "El id de la Post que se desea borrar") @PathVariable UUID id) {
-
-        Optional<Post> inmo = service.findById(id);
-
-        if(inmo.isEmpty())
-            return ResponseEntity
-                    .notFound()
-                    .build();
+    public ResponseEntity<?> deletePost(@Parameter(description = "El id del Post que se desea borrar") @PathVariable UUID id) {
 
         service.deleteById(id);
-
-        return ResponseEntity
-                .noContent()
-                .build();
+        return ResponseEntity.noContent().build();
     }
 }

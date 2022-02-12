@@ -1,12 +1,13 @@
 package com.salesianostriana.dam.springapimiarma.users.model;
 
 import com.salesianostriana.dam.springapimiarma.model.Post;
-import org.hibernate.annotations.Parameter;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Parameter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -37,11 +38,14 @@ public class UserEntity implements UserDetails, Serializable {
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "UUID")
     private UUID id;
 
-    private String full_name, direccion, telefono, nickname, avatar, password;
+    private String full_name, direccion, telefono, avatar, password;
 
     private LocalDateTime fecha_nacimiento;
 
     @NaturalId
+    @Column(unique = true, updatable = false)
+    private String nickname;
+
     @Column(unique = true, updatable = false)
     private String email;
 

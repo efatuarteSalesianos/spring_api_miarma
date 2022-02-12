@@ -1,18 +1,16 @@
 package com.salesianostriana.dam.springapimiarma.dto;
 
 import com.salesianostriana.dam.springapimiarma.model.Post;
-import com.salesianostriana.dam.springapimiarma.model.Vivienda;
-import com.salesianostriana.dam.springapimiarma.users.dto.UserDtoConverter;
+import com.salesianostriana.dam.springapimiarma.users.controllers.dto.UserDtoConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class PostDtoConverter {
 
-    private final UserDtoConverter userDtoConverter;
+    private final UserDtoConverter dtoConverter;
 
     public Post createPostDtoToPost(CreatePostDto post) {
         return Post.builder()
@@ -23,7 +21,7 @@ public class PostDtoConverter {
                 .build();
     }
 
-    public GetPostDto PostToGetPostDto(Post p) {
+    public GetPostDto postToGetPostDto(Post p) {
         return GetPostDto
                 .builder()
                 .id(p.getId())
@@ -31,7 +29,16 @@ public class PostDtoConverter {
                 .descripcion(p.getDescripcion())
                 .media(p.getMedia())
                 .tipo(p.getTipo())
-                .propietario(userDtoConverter(p.getPropietario()))
+                .build();
+    }
+
+    public GetPostListDto postToGetPostListDto(Post p) {
+        return GetPostListDto
+                .builder()
+                .id(p.getId())
+                .titulo(p.getTitulo())
+                .descripcion(p.getDescripcion())
+                .media(p.getMedia())
                 .build();
     }
 }
