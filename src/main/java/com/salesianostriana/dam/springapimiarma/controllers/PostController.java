@@ -3,7 +3,7 @@ package com.salesianostriana.dam.springapimiarma.controllers;
 import com.salesianostriana.dam.springapimiarma.dto.*;
 import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.services.PostService;
-import com.salesianostriana.dam.springapimiarma.users.controllers.dto.UserDtoConverter;
+import com.salesianostriana.dam.springapimiarma.users.dto.UserDtoConverter;
 import com.salesianostriana.dam.springapimiarma.users.services.UserEntityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

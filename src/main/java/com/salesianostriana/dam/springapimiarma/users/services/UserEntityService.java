@@ -1,8 +1,7 @@
 package com.salesianostriana.dam.springapimiarma.users.services;
 
-import com.salesianostriana.dam.springapimiarma.services.PostService;
 import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
-import com.salesianostriana.dam.springapimiarma.users.controllers.dto.CreateUserDto;
+import com.salesianostriana.dam.springapimiarma.users.dto.CreateUserDto;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import com.salesianostriana.dam.springapimiarma.users.repositories.UserEntityRepository;
 import lombok.RequiredArgsConstructor;

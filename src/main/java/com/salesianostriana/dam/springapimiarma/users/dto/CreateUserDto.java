@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.springapimiarma.users.controllers.dto;
+package com.salesianostriana.dam.springapimiarma.users.dto;
 
 import com.salesianostriana.dam.springapimiarma.users.model.ProfileType;
 import com.salesianostriana.dam.springapimiarma.validacion.multiple.anotaciones.FieldsValueMatch;
