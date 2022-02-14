@@ -4,7 +4,6 @@ import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccou
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.SingleEntityNotFoundException;
 import com.salesianostriana.dam.springapimiarma.ficheros.service.FileSystemStorageService;
 import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
-import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
 import com.salesianostriana.dam.springapimiarma.users.dto.CreateUserDto;
 import com.salesianostriana.dam.springapimiarma.users.dto.GetFollowDto;
@@ -21,12 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service("userDetailService")
 @RequiredArgsConstructor

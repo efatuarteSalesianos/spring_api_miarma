@@ -1,15 +1,13 @@
 package com.salesianostriana.dam.springapimiarma.ficheros.service;
 
-import com.salesianostriana.dam.springapimiarma.ficheros.utils.MediaTypeUrlResource;
-import com.salesianostriana.dam.springapimiarma.ficheros.utils.StorageProperties;
 import com.salesianostriana.dam.springapimiarma.ficheros.errores.FileNotFoundException;
 import com.salesianostriana.dam.springapimiarma.ficheros.errores.StorageException;
-import org.apache.commons.io.FilenameUtils;
-import org.slf4j.LoggerFactory;
+import com.salesianostriana.dam.springapimiarma.ficheros.utils.MediaTypeUrlResource;
+import com.salesianostriana.dam.springapimiarma.ficheros.utils.StorageProperties;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
@@ -18,26 +16,20 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
-
-import org.imgscalr.Scalr;
 
 
 @Service
 public class FileSystemStorageService implements StorageService {
-
-    @Value("${storage.location}")
-    private String imageFolder;
-
-    @Value("${image.size}")
-    private Integer imageSize;
 
     private final Path rootLocation;
 
@@ -45,7 +37,6 @@ public class FileSystemStorageService implements StorageService {
     public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
     }
-
 
     @PostConstruct
     @Override

@@ -25,7 +25,7 @@ public class UserDtoConverter {
                 .fecha_nacimiento(user.getFecha_nacimiento())
                 .privacidad(user.getPrivacidad())
                 .posts(user.getPosts().stream().map(postDtoConverter::postToGetPostDto).collect(Collectors.toList()))
-                .numSeguidores(user.getPeticiones_seguimiento().size())
+                .numSeguidores(user.getSeguidores().size())
                 .build();
     }
 

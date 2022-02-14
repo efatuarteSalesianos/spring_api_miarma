@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PostDtoConverter {
 
-    private final UserDtoConverter dtoConverter;
-
     public Post createPostDtoToPost(CreatePostDto post) {
         return Post.builder()
                 .titulo(post.getTitulo())

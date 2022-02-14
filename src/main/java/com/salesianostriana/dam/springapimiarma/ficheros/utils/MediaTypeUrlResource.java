@@ -1,15 +1,13 @@
 package com.salesianostriana.dam.springapimiarma.ficheros.utils;
 
 import com.salesianostriana.dam.springapimiarma.ficheros.errores.StorageException;
+import org.apache.tika.Tika;
 import org.springframework.core.io.UrlResource;
 
-import java.net.MalformedURLException;
 import java.io.IOException;
-
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-
-import org.apache.tika.Tika;
 
 public class MediaTypeUrlResource extends UrlResource {
 

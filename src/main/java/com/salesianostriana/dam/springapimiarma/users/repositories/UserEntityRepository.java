@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.springapimiarma.users.repositories;
 
-import com.salesianostriana.dam.springapimiarma.users.dto.GetFollowDto;
 import com.salesianostriana.dam.springapimiarma.users.model.Follow;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
