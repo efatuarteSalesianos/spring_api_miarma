@@ -1,7 +1,6 @@
 package com.salesianostriana.dam.springapimiarma.users.model;
 
 import lombok.*;
-import org.apache.catalina.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

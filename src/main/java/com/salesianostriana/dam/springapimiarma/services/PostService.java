@@ -3,14 +3,16 @@ package com.salesianostriana.dam.springapimiarma.services;
 import com.salesianostriana.dam.springapimiarma.dto.*;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.ListEntityNotFoundException;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.SingleEntityNotFoundException;
+import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
 import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.repositories.PostRepository;
 import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
-import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import com.salesianostriana.dam.springapimiarma.users.repositories.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,12 +27,21 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
     private final PostRepository repository;
     private final UserEntityRepository userEntityRepository;
     private final PostDtoConverter dtoConverter;
+    private final StorageService storageService;
 
-    public Post save(CreatePostDto newPost) {
+    public Post save(CreatePostDto newPost, MultipartFile file) {
+
+        String filename = storageService.store(file);
+
+        String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/download/")
+                .path(filename)
+                .toUriString();
+
         return repository.save(Post.builder()
                     .titulo(newPost.getTitulo())
                     .descripcion(newPost.getDescripcion())
-                    .media(newPost.getMedia())
+                    .media(uri)
                     .fechaPublicacion(LocalDateTime.now())
                     .tipo(newPost.getTipo())
                 .build());

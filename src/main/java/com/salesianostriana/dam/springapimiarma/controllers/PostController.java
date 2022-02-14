@@ -4,6 +4,7 @@ import com.salesianostriana.dam.springapimiarma.dto.*;
 import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.services.PostService;
 import com.salesianostriana.dam.springapimiarma.users.dto.UserDtoConverter;
+import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import com.salesianostriana.dam.springapimiarma.users.services.UserEntityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,7 +16,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -46,8 +49,8 @@ public class PostController {
                     content = @Content)
     })
     @PostMapping("/")
-    public ResponseEntity<Post> nuevoPost(@Valid @RequestBody CreatePostDto nuevoPost) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(nuevoPost));
+    public ResponseEntity<Post> nuevoPost(@Valid @RequestBody CreatePostDto nuevoPost, @RequestPart("file") MultipartFile file) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(nuevoPost, file));
     }
 
     @Operation(summary = "Se muestra un listado con todos los Posts públicos")
@@ -84,6 +87,24 @@ public class PostController {
     @GetMapping("/{nickname}")
     public List<GetPostListDto> listPostsByNick(@PathVariable String nickname) {
         return service.postByNickname(nickname);
+    }
+
+    @Operation(summary = "Se muestra un listado con todos los Posts del usuario logueado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se muestra la lista correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Post.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "No hay Posts",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Acceso denegado",
+                    content = @Content)
+    })
+    @GetMapping("/me")
+    public List<GetPostListDto> listPostsMe(@AuthenticationPrincipal UserEntity user) {
+        return service.postByNickname(user.getUsername());
     }
 
     @Operation(summary = "Se muestran los detalles de un Post")

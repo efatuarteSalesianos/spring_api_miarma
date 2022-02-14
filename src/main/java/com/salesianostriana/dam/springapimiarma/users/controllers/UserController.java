@@ -1,7 +1,7 @@
 package com.salesianostriana.dam.springapimiarma.users.controllers;
 
-import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.users.dto.CreateUserDto;
+import com.salesianostriana.dam.springapimiarma.users.dto.GetFollowDto;
 import com.salesianostriana.dam.springapimiarma.users.dto.GetUserDto;
 import com.salesianostriana.dam.springapimiarma.users.dto.UserDtoConverter;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
@@ -14,14 +14,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,13 +44,31 @@ public class UserController {
                     content = @Content)
     })
     @PostMapping("/auth/register/")
-    public ResponseEntity<GetUserDto> newUser(@Parameter(description = "El cuerpo con los atributos del nuevo usuario") @RequestBody CreateUserDto newUser) {
+    public ResponseEntity<GetUserDto> newUser(@Parameter(description = "El cuerpo con los atributos del nuevo usuario") @RequestBody CreateUserDto newUser, @RequestPart("file") MultipartFile file) {
         UserEntity saved = userEntityService.save(newUser);
 
         if(saved == null)
             return ResponseEntity.badRequest().build();
         else
             return ResponseEntity.status(HttpStatus.CREATED).body(userDtoConverter.convertUserEntityToGetUserDto(saved));
+    }
+
+    @Operation(summary = "Se listan todas las peticiones de seguimiento dentro de la aplicación")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "20",
+                    description = "Se muestran las peticiones correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserEntity.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se encuentran peticiones de seguimiento",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Acceso denegado",
+                    content = @Content)
+    })
+    @GetMapping("/follow/list")
+    public List<GetFollowDto> findAllFollows() {
+        return userEntityService.findAllPeticionesSeguimiento();
     }
 
 }
