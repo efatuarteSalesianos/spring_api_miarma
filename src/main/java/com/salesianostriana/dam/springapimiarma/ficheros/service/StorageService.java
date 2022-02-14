@@ -1,9 +1,7 @@
 package com.salesianostriana.dam.springapimiarma.ficheros.service;
 
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -22,5 +20,4 @@ public interface StorageService {
     void deleteFile(String filename);
 
     void deleteAll();
-
 }

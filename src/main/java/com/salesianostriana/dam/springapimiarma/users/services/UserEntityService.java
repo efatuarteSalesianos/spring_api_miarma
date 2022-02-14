@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.springapimiarma.users.services;
 
+import com.salesianostriana.dam.springapimiarma.ficheros.service.FileSystemStorageService;
 import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
 import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
 import com.salesianostriana.dam.springapimiarma.users.dto.CreateUserDto;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityRepository> implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
+    private final FileSystemStorageService fileSystemStorageService;
     private final UserDtoConverter dtoConverter;
     private final UserEntityRepository userEntityRepository;
     private final StorageService storageService;
