@@ -7,6 +7,7 @@ import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
 import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.repositories.PostRepository;
 import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
+import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import com.salesianostriana.dam.springapimiarma.users.repositories.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -58,13 +59,17 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
         }
     }
 
-    public GetPostDto findPostById(UUID id) {
+    public GetPostDto findPostById(UUID id, UserEntity user) {
         Optional<Post> result = repositorio.findById(id);
 
         if (result.isEmpty()) {
             throw new SingleEntityNotFoundException(id.toString(), Post.class);
         } else {
-            return result.map(dtoConverter::postToGetPostDto).get();
+            UserEntity usuario = result.get().getPropietario();
+            if (usuario.getSeguidores().contains(user))
+                return result.map(dtoConverter::postToGetPostDto).get();
+            else
+                throw new UsernameNotFoundException("No puedes ver los post de este usuario, ya que no le sigues");
         }
     }
 

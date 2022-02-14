@@ -62,6 +62,37 @@ public class UserEntity implements UserDetails, Serializable {
     @OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<Follow> solicitudes_seguimiento = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "seguidor_id",
+            foreignKey = @ForeignKey(name="FK_SEGUIDOR")),
+            inverseJoinColumns = @JoinColumn(name = "seguido_id",
+                    foreignKey = @ForeignKey(name="FK_SEGUIDO")),
+            name = "relaciones_user"
+    )
+    private List<UserEntity> seguidores = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "seguidores", fetch = FetchType.EAGER)
+    private List<UserEntity> seguidos = new ArrayList<>();
+
+    ////////////////////////////////////////////
+    /* HELPERS de la asociación con Seguidor*/
+    ////////////////////////////////////////////
+
+    public void addSeguidor(UserEntity u) {
+        if (this.getSeguidores() == null)
+            this.setSeguidores(new ArrayList<>());
+        this.getSeguidores().add(u);
+
+        if (u.getSeguidores() == null)
+            u.setSeguidores(new ArrayList<>());
+        u.getSeguidores().add(this);
+    }
+
+    public void removeSeguidor(UserEntity u) {
+        u.getSeguidores().remove(this);
+        this.getSeguidores().remove(u);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

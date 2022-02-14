@@ -92,49 +92,25 @@ public class FileSystemStorageService implements StorageService {
 
     }
 
-    public String storeAndResize(MultipartFile file) throws IOException {
+    public static byte [] storeAndResize (MultipartFile file) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
-        String newFilename = "";
         String extension = StringUtils.getFilenameExtension(filename);
 
-        byte[] byteImg = Files.readAllBytes(Paths.get(filename));
-
-        BufferedImage original = ImageIO.read(
-                new ByteArrayInputStream(byteImg)
-        );
-
-        BufferedImage scaled = Scalr.resize(original, 512);
-
-        OutputStream out = Files.newOutputStream(Paths.get(filename + "_thumb" + extension));
-
-        ImageIO.write(scaled, extension, out);
+        BufferedImage original = null;
 
         try {
-            if (file.isEmpty())
-                throw new StorageException("El fichero subido está vacío");
+            original = ImageIO.read(
+                    new ByteArrayInputStream(file.getBytes())
+            );
+            BufferedImage scaled = Scalr.resize(original,512);
 
-            newFilename = filename;
-            while (Files.exists(rootLocation.resolve(newFilename))) {
-                String name = newFilename.replace("." + extension, "");
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(scaled, extension, os);
+            return os.toByteArray();
 
-                String suffix = Long.toString(System.currentTimeMillis());
-                suffix = suffix.substring(suffix.length() - 6);
-
-                newFilename = name + "_" + suffix + "." + extension;
-
-            }
-
-            try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, rootLocation.resolve(newFilename),
-                        StandardCopyOption.REPLACE_EXISTING);
-            }
-
-
-        } catch (IOException ex) {
-            throw new StorageException("Error en el almacenamiento del fichero: " + newFilename, ex);
+        } catch (IOException e) {
+            throw new StorageException("Failed to resize file: " + file.getOriginalFilename(), e);
         }
-
-        return newFilename;
 
     }
 

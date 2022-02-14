@@ -121,8 +121,8 @@ public class PostController {
                     content = @Content)
     })
     @GetMapping("/{id}")
-    public GetPostDto buscarPost(@Parameter(description = "El id del Post que se busca") @PathVariable UUID id) {
-        return service.findPostById(id);
+    public GetPostDto buscarPost(@Parameter(description = "El id del Post que se busca") @PathVariable UUID id, @AuthenticationPrincipal UserEntity user) {
+        return service.findPostById(id, user);
 
     }
 
