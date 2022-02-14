@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.springapimiarma.users.services;
 
+import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
 import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
 import com.salesianostriana.dam.springapimiarma.users.dto.CreateUserDto;
 import com.salesianostriana.dam.springapimiarma.users.dto.GetFollowDto;
@@ -12,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +27,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
     private final PasswordEncoder passwordEncoder;
     private final UserDtoConverter dtoConverter;
     private final UserEntityRepository userEntityRepository;
+    private final StorageService storageService;
 
     @Override
     public UserDetails loadUserByUsername(String nick) throws UsernameNotFoundException {
@@ -31,12 +35,20 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
                 .orElseThrow(()-> new UsernameNotFoundException(nick + " no encontrado"));
     }
 
-    public UserEntity save(CreateUserDto newUser) {
+    public UserEntity save(CreateUserDto newUser, MultipartFile file) {
+
+        String filename = storageService.store(file);
+
+        String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/download/")
+                .path(filename)
+                .toUriString();
+
         if(newUser.getPassword().contentEquals(newUser.getVerifyPassword())) {
             UserEntity userEntity = UserEntity.builder()
                     .email(newUser.getEmail())
                     .full_name(newUser.getFull_name())
-                    .avatar(newUser.getAvatar())
+                    .avatar(uri)
                     .password(passwordEncoder.encode(newUser.getPassword()))
                     .build();
             return save(userEntity);

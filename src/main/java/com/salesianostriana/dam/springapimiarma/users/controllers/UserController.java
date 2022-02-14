@@ -45,7 +45,7 @@ public class UserController {
     })
     @PostMapping("/auth/register/")
     public ResponseEntity<GetUserDto> newUser(@Parameter(description = "El cuerpo con los atributos del nuevo usuario") @RequestBody CreateUserDto newUser, @RequestPart("file") MultipartFile file) {
-        UserEntity saved = userEntityService.save(newUser);
+        UserEntity saved = userEntityService.save(newUser, file);
 
         if(saved == null)
             return ResponseEntity.badRequest().build();
