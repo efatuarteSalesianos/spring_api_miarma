@@ -2,6 +2,7 @@ package com.salesianostriana.dam.springapimiarma.services;
 
 import com.salesianostriana.dam.springapimiarma.dto.*;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.ListEntityNotFoundException;
+import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccountException;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.SingleEntityNotFoundException;
 import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
 import com.salesianostriana.dam.springapimiarma.model.Post;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.salesianostriana.dam.springapimiarma.model.PostType.PUBLIC;
 
 @Service
 @RequiredArgsConstructor
@@ -48,8 +51,8 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
                 .build());
     }
 
-    public List<GetPostListDto> findAllPosts() {
-        List<Post> result = repositorio.findAll();
+    public List<GetPostListDto> findAllPublicPosts() {
+        List<Post> result = repositorio.postsPublicos();
 
         if (result.isEmpty()) {
             throw new ListEntityNotFoundException(Post.class);
@@ -59,17 +62,18 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
         }
     }
 
-    public GetPostDto findPostById(UUID id, UserEntity user) {
+    public GetPostDto findPostById(UUID id, UserEntity user) throws PrivateAccountException {
         Optional<Post> result = repositorio.findById(id);
 
         if (result.isEmpty()) {
             throw new SingleEntityNotFoundException(id.toString(), Post.class);
         } else {
             UserEntity usuario = result.get().getPropietario();
-            if (usuario.getSeguidores().contains(user))
+
+            if (result.get().getTipo() == PUBLIC || usuario.getSeguidores().contains(user))
                 return result.map(dtoConverter::postToGetPostDto).get();
             else
-                throw new UsernameNotFoundException("No puedes ver los post de este usuario, ya que no le sigues");
+                throw new PrivateAccountException("No puedes ver el post de este usuario, ya que no le sigues");
         }
     }
 
@@ -89,10 +93,6 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
                     })
                     .map(dtoConverter::postToGetPostDto).get();
         }
-    }
-
-    public List<GetPostListDto> postPublicos() {
-        return repository.postsPublicos().stream().map(dtoConverter::postToGetPostListDto).collect(Collectors.toList());
     }
 
     public List<GetPostListDto> postByNickname(String nick) {

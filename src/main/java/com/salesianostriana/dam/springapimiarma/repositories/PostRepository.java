@@ -20,7 +20,15 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     @Query(value = """
             SELECT p
             FROM Post p
-            WHERE p.privacidad = :nickname
+            WHERE p.privacidad = PUBLIC
+            AND p.propietario = :nickname
+            """, nativeQuery = true)
+    public List<Post> publicPostsByUser(@Param("nickname") String nickname);
+
+    @Query(value = """
+            SELECT p
+            FROM Post p
+            WHERE p.propietario = :nickname
             """, nativeQuery = true)
     public List<Post> postsByUser(@Param("nickname") String nickname);
 }

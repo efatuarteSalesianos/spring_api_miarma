@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.springapimiarma.users.controllers;
 
+import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccountException;
 import com.salesianostriana.dam.springapimiarma.users.dto.CreateUserDto;
 import com.salesianostriana.dam.springapimiarma.users.dto.GetFollowDto;
 import com.salesianostriana.dam.springapimiarma.users.dto.GetUserDto;
@@ -16,11 +17,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,6 +54,24 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         else
             return ResponseEntity.status(HttpStatus.CREATED).body(userDtoConverter.convertUserEntityToGetUserDto(saved));
+    }
+
+    @Operation(summary = "Se obtiene el perfil de un usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se muestra el perfil del usuario",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserEntity.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "La cuenta del usuario al que buscamos tiene la cuenta privada y no seguimos a esa cuenta",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Acceso denegado",
+                    content = @Content)
+    })
+    @GetMapping("/profile/{id{")
+    public GetUserDto findProfileById(@PathVariable UUID id, @AuthenticationPrincipal UserEntity user) throws PrivateAccountException {
+        return userEntityService.findUserProfileById(id, user);
     }
 
     @Operation(summary = "Se listan todas las peticiones de seguimiento dentro de la aplicación")

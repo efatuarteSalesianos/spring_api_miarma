@@ -1,10 +1,14 @@
 package com.salesianostriana.dam.springapimiarma.users.services;
 
+import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccountException;
+import com.salesianostriana.dam.springapimiarma.errores.excepciones.SingleEntityNotFoundException;
 import com.salesianostriana.dam.springapimiarma.ficheros.service.FileSystemStorageService;
 import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
+import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
 import com.salesianostriana.dam.springapimiarma.users.dto.CreateUserDto;
 import com.salesianostriana.dam.springapimiarma.users.dto.GetFollowDto;
+import com.salesianostriana.dam.springapimiarma.users.dto.GetUserDto;
 import com.salesianostriana.dam.springapimiarma.users.dto.UserDtoConverter;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import com.salesianostriana.dam.springapimiarma.users.repositories.UserEntityRepository;
@@ -20,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -59,6 +64,18 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
         }
         else {
             return null;
+        }
+    }
+
+    public GetUserDto findUserProfileById(UUID id, UserEntity user) throws PrivateAccountException {
+        Optional<UserEntity> encontrado = repositorio.findById(id);
+        if (encontrado.isEmpty())
+            throw new SingleEntityNotFoundException(id.toString(), UserEntity.class);
+        else {
+            if (encontrado.get().getSeguidores().contains(user))
+                return dtoConverter.convertUserEntityToGetUserDto(encontrado.get());
+            else
+                throw new PrivateAccountException("No se pudo mostrar el perfil del usuario que buscas, ya que su cuenta es privada y no te encuentras entre sus seguidores.");
         }
     }
 

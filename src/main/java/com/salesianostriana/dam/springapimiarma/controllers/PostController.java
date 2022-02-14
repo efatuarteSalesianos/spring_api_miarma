@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.springapimiarma.controllers;
 
 import com.salesianostriana.dam.springapimiarma.dto.*;
+import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccountException;
 import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.services.PostService;
 import com.salesianostriana.dam.springapimiarma.users.dto.UserDtoConverter;
@@ -66,12 +67,12 @@ public class PostController {
                     description = "Acceso denegado",
                     content = @Content)
     })
-    @GetMapping("/")
+    @GetMapping("/public")
     public List<GetPostListDto> listPostPublicos() {
-        return service.postPublicos();
+        return service.findAllPublicPosts();
     }
 
-    @Operation(summary = "Se muestra un listado con todos los Posts de un usuario dado")
+    @Operation(summary = "Se muestra un listado con todos los Posts públicos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se muestra la lista correctamente",
@@ -121,7 +122,7 @@ public class PostController {
                     content = @Content)
     })
     @GetMapping("/{id}")
-    public GetPostDto buscarPost(@Parameter(description = "El id del Post que se busca") @PathVariable UUID id, @AuthenticationPrincipal UserEntity user) {
+    public GetPostDto buscarPost(@Parameter(description = "El id del Post que se busca") @PathVariable UUID id, @AuthenticationPrincipal UserEntity user) throws PrivateAccountException {
         return service.findPostById(id, user);
 
     }
