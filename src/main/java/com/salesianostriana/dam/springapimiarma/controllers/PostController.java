@@ -50,7 +50,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(nuevoPost));
     }
 
-    @Operation(summary = "Se muestra un listado con todos los Posts")
+    @Operation(summary = "Se muestra un listado con todos los Posts públicos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se muestra la lista correctamente",
@@ -64,8 +64,26 @@ public class PostController {
                     content = @Content)
     })
     @GetMapping("/")
-    public List<GetPostListDto> listarPosts() {
-        return service.findAllPosts();
+    public List<GetPostListDto> listPostPublicos() {
+        return service.postPublicos();
+    }
+
+    @Operation(summary = "Se muestra un listado con todos los Posts de un usuario dado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se muestra la lista correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Post.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "No hay Posts",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Acceso denegado",
+                    content = @Content)
+    })
+    @GetMapping("/{nickname}")
+    public List<GetPostListDto> listPostsByNick(@PathVariable String nickname) {
+        return service.postByNickname(nickname);
     }
 
     @Operation(summary = "Se muestran los detalles de un Post")

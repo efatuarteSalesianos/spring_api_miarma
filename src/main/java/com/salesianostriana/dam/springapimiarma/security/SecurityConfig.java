@@ -5,7 +5,6 @@ import com.salesianostriana.dam.springapimiarma.security.jwt.JwtAuthorizationFil
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -48,34 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/auth/register/PROPIETARIO").anonymous()
-                .antMatchers(HttpMethod.POST, "/auth/login").anonymous()
-                .antMatchers(HttpMethod.POST, "/auth/register/GESTOR").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/auth/register/ADMIN").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/propietario/").anonymous()
-                .antMatchers(HttpMethod.GET, "/propietario/{id}").hasAnyRole("ADMIN", "PROPIETARIO")
-                .antMatchers(HttpMethod.DELETE, "/propietario/{id}").hasAnyRole("ADMIN", "PROPIETARIO")
-                .antMatchers(HttpMethod.POST, "/vivienda/").hasRole("PROPIETARIO")
-                .antMatchers(HttpMethod.GET, "/vivienda/").anonymous()
-                .antMatchers(HttpMethod.GET, "/vivienda/{id}").anonymous()
-                .antMatchers(HttpMethod.PUT, "/vivienda/{id}").hasAnyRole("ADMIN", "PROPIETARIO")
-                .antMatchers(HttpMethod.DELETE, "/vivienda/{id}").hasAnyRole("ADMIN", "PROPIETARIO")
-                .antMatchers(HttpMethod.POST, "/vivienda/{id}/Post/{id2}").hasAnyRole("ADMIN", "PROPIETARIO")
-                .antMatchers(HttpMethod.DELETE, "/vivienda/{id}/Post/").hasAnyRole("ADMIN", "PROPIETARIO")
-                .antMatchers(HttpMethod.GET, "/vivienda/top?n={limit}").anonymous()
-                .antMatchers(HttpMethod.POST, "/Post/").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/Post/{id}/gestor").hasAnyRole("ADMIN", "GESTOR")
-                .antMatchers(HttpMethod.DELETE, "/Post/gestor/{id}").hasAnyRole("ADMIN", "GESTOR")
-                .antMatchers(HttpMethod.GET, "/Post/gestores").hasAnyRole("GESTOR")
-                .antMatchers(HttpMethod.GET, "/Post/").anonymous()
-                .antMatchers(HttpMethod.GET, "/Post/{id}").anonymous()
-                .antMatchers(HttpMethod.DELETE, "/Post/{id}").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/Post/{id}/gestores/").hasAnyRole("ADMIN", "GESTOR")
-                .antMatchers(HttpMethod.POST, "/vivienda/{id}/meinteresa").hasRole("PROPIETARIO")
-                .antMatchers(HttpMethod.DELETE, "/vivienda/{id}/meinteresa").hasAnyRole("ADMIN", "PROPIETARIO")
-                .antMatchers(HttpMethod.GET, "/interesado/").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/interesado/{id}").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/vivienda/user").hasRole("PROPIETARIO")
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();
 

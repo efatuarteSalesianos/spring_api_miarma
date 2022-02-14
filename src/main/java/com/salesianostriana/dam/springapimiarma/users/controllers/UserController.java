@@ -25,31 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name="Auth", description = "Clase controladora de la seguridad")
+@Tag(name="UserEntity", description = "Clase controladora de los usuario")
 public class UserController {
 
     private final UserEntityService userEntityService;
     private final UserDtoConverter userDtoConverter;
 
-    @Operation(summary = "Se muestra la información del usuario logueado")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Se muestra correctamente la información del usuario",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserEntity.class))}),
-            @ApiResponse(responseCode = "400",
-                    description = "Hay un error en los datos",
-                    content = @Content),
-            @ApiResponse(responseCode = "403",
-                    description = "Acceso denegado",
-                    content = @Content)
-    })
-    @GetMapping("/me")
-    public GetUserDto getMe(@AuthenticationPrincipal UserEntity user){
-        return userDtoConverter.convertUserEntityToGetUserDto(user);
-    }
-
-    @Operation(summary = "Se añade una usuario del rol establecido como parámetro")
+    @Operation(summary = "Se añade un usuario")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
                     description = "Se ha creado correctamente",

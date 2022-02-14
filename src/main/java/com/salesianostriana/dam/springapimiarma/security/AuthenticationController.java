@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.springapimiarma.security;
 
-import com.salesianostriana.dam.springapimiarma.model.Vivienda;
 import com.salesianostriana.dam.springapimiarma.security.dto.JwtUserConverter;
 import com.salesianostriana.dam.springapimiarma.security.dto.LoginDto;
 import com.salesianostriana.dam.springapimiarma.security.jwt.JwtProvider;
@@ -11,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +36,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "200",
                     description = "El usuario inicia sesión correctamente",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Vivienda.class))}),
+                            schema = @Schema(implementation = UserEntity.class))}),
             @ApiResponse(responseCode = "400",
                     description = "Hay un error en los datos",
                     content = @Content),
@@ -50,7 +50,7 @@ public class AuthenticationController {
         Authentication authentication =
                 authenticationManager.authenticate(
                    new UsernamePasswordAuthenticationToken(
-                           loginDto.getEmail(),
+                           loginDto.getNickname(),
                            loginDto.getPassword()
                    )
                 );
@@ -65,6 +65,19 @@ public class AuthenticationController {
                 .body(jwtUserConverter.convertUserToJwtUserResponse(user, jwt));
     }
 
+    @Operation(summary = "Se muestra la información del usuario logueado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se muestra correctamente la información del usuario",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserEntity.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "Hay un error en los datos",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Acceso denegado",
+                    content = @Content)
+    })
     @GetMapping("/me")
     public ResponseEntity<?> quienSoy(@AuthenticationPrincipal UserEntity user){
         return ResponseEntity.ok(jwtUserConverter.convertUserToJwtUserResponse(user, null));

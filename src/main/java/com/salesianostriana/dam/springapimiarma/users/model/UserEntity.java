@@ -54,17 +54,13 @@ public class UserEntity implements UserDetails, Serializable {
     @ManyToOne
     private List<Post> posts = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(joinColumns = @JoinColumn(name = "usuario_id",
-            foreignKey = @ForeignKey(name="FK_SOLICITUD_SEGUIDOR")),
-            inverseJoinColumns = @JoinColumn(name = "usuario_id",
-                    foreignKey = @ForeignKey(name="FK_SOLICITUD_SEGUIMIENTO")),
-            name = "solicitudes"
-    )
-    List<UserEntity> seguidores = new ArrayList<>();
+    @Builder.Default
+    @OneToMany(mappedBy = "seguidor", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private List<Follow> peticiones_seguimiento = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "seguidores", fetch = FetchType.EAGER)
-    private List<UserEntity> seguidos;
+    @Builder.Default
+    @OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private List<Follow> solicitudes_seguimiento = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

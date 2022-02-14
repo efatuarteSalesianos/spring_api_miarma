@@ -10,10 +10,9 @@ import java.util.UUID;
 public class JwtUserResponse {
 
     private UUID id;
-    private String email;
+    private String nickname;
     private String fullName;
     private String avatar;
-    private String role;
     private String token;
 
 }

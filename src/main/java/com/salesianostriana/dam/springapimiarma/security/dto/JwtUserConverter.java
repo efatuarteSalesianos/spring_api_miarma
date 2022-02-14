@@ -10,9 +10,8 @@ public class JwtUserConverter {
         return JwtUserResponse.builder()
                 .id(user.getId())
                 .fullName(user.getFull_name())
-                .email(user.getEmail())
+                .nickname(user.getNickname())
                 .avatar(user.getAvatar())
-                .role(user.getRole().name())
                 .token(jwt)
                 .build();
     }
