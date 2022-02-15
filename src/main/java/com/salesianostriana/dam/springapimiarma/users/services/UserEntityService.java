@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.salesianostriana.dam.springapimiarma.users.model.ProfileType.PUBLIC;
+
 @Service("userDetailService")
 @RequiredArgsConstructor
 public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityRepository> implements UserDetailsService {
@@ -68,7 +70,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
         if (encontrado.isEmpty())
             throw new SingleEntityNotFoundException(id.toString(), UserEntity.class);
         else {
-            if (encontrado.get().getSeguidores().contains(user))
+            if (encontrado.get().getPrivacidad() == PUBLIC || encontrado.get().getSeguidores().contains(user))
                 return dtoConverter.convertUserEntityToGetUserDto(encontrado.get());
             else
                 throw new PrivateAccountException("No se pudo mostrar el perfil del usuario que buscas, ya que su cuenta es privada y no te encuentras entre sus seguidores.");
