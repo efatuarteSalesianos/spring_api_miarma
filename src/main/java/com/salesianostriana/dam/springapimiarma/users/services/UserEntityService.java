@@ -77,7 +77,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
         }
     }
 
-    public List<GetFollowDto> findAllPeticionesSeguimiento() {
-        return userEntityRepository.findByPeticiones_seguimiento().stream().map(dtoConverter::convertFollowToGetFollowDto).toList();
+    public List<GetFollowDto> findAllPeticionesSeguimiento(UserEntity user) {
+        return userEntityRepository.findAllSolicitudesById(user.getId()).stream().map(dtoConverter::convertFollowToGetFollowDto).toList();
     }
 }

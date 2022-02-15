@@ -140,7 +140,7 @@ public class PostController {
                     description = "Acceso denegado",
                     content = @Content)
     })
-    @GetMapping("/{id}")
+    @PutMapping("/{id}")
     public GetPostDto editarPost(@Parameter(description = "El id del Post que se busca") @PathVariable UUID id, @Valid @RequestBody SavePostDto post) {
         return service.edit(id, post);
 

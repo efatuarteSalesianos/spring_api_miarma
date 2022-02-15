@@ -9,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter
 @Builder
-public class UserEntity implements UserDetails, Serializable {
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -51,16 +50,22 @@ public class UserEntity implements UserDetails, Serializable {
 
     private ProfileType privacidad;
 
-    @ManyToOne
+    @OneToMany(mappedBy = "propietario", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<Post> posts = new ArrayList<>();
 
-    @Builder.Default
+   /* @Builder.Default
     @OneToMany(mappedBy = "seguidor", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<Follow> peticiones_seguimiento = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<Follow> solicitudes_seguimiento = new ArrayList<>();
+    private List<Follow> solicitudes_seguimiento = new ArrayList<>();*/
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name="solicutud_seguimiento",
+    joinColumns = @JoinColumn(name="solicitante_id"),
+    inverseJoinColumns = @JoinColumn(name="solicitado_id"))
+    private List<UserEntity> solicitudes = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "seguidor_id",

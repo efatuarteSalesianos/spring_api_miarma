@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class Post implements Serializable {
 
@@ -39,6 +41,6 @@ public class Post implements Serializable {
 
     private PostType tipo;
 
-    @OneToMany(mappedBy = "Post", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @ManyToOne
     private UserEntity propietario;
 }

@@ -14,6 +14,6 @@ public interface UserEntityRepository extends JpaRepository<UserEntity, UUID> {
 
     boolean existsByNickname(String nickname);
 
-    List<Follow> findByPeticiones_seguimiento();
+    List<Follow> findAllSolicitudesById(UUID id);
 
 }

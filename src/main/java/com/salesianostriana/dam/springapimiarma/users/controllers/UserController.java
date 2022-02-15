@@ -68,7 +68,7 @@ public class UserController {
                     description = "Acceso denegado",
                     content = @Content)
     })
-    @GetMapping("/profile/{id{")
+    @GetMapping("/profile/{id}")
     public GetUserDto findProfileById(@PathVariable UUID id, @AuthenticationPrincipal UserEntity user) throws PrivateAccountException {
         return userEntityService.findUserProfileById(id, user);
     }
@@ -87,8 +87,8 @@ public class UserController {
                     content = @Content)
     })
     @GetMapping("/follow/list")
-    public List<GetFollowDto> findAllFollows() {
-        return userEntityService.findAllPeticionesSeguimiento();
+    public List<GetFollowDto> findAllFollows(@AuthenticationPrincipal UserEntity user) {
+        return userEntityService.findAllPeticionesSeguimiento(user);
     }
 
 }

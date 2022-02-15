@@ -1,7 +1,7 @@
 package com.salesianostriana.dam.springapimiarma.ficheros.controller;
 
-import com.salesianostriana.dam.springapimiarma.ficheros.models.FileResponse;
 import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
+import com.salesianostriana.dam.springapimiarma.ficheros.utils.FileResponse;
 import com.salesianostriana.dam.springapimiarma.ficheros.utils.MediaTypeUrlResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;

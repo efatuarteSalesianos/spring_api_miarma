@@ -1,7 +1,6 @@
 package com.salesianostriana.dam.springapimiarma.dto;
 
 import com.salesianostriana.dam.springapimiarma.model.Post;
-import com.salesianostriana.dam.springapimiarma.users.dto.UserDtoConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
