@@ -8,6 +8,7 @@ import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
 import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.repositories.PostRepository;
 import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
+import com.salesianostriana.dam.springapimiarma.users.model.ProfileType;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import com.salesianostriana.dam.springapimiarma.users.repositories.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
@@ -103,7 +104,7 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
             if (encontrado.isEmpty())
                 throw new SingleEntityNotFoundException(nick, UserEntity.class);
             else {
-                if (encontrado.get().getSeguidores().contains(user))
+                if (encontrado.get().getPrivacidad() == ProfileType.PUBLIC || encontrado.get().getSeguidores().contains(user))
                     return repository.postsByUser(nick).stream().map(dtoConverter::postToGetPostListDto).collect(Collectors.toList());
                 else
                     return repository.publicPostsByUser(nick).stream().map(dtoConverter::postToGetPostListDto).collect(Collectors.toList());
