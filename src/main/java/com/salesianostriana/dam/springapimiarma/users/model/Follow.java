@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor @AllArgsConstructor
@@ -30,7 +30,7 @@ public class Follow implements Serializable {
     private UserEntity usuario;
 
     @CreatedDate
-    private LocalDateTime createdDate;
+    private LocalDate createdDate;
 
     /* HELPERS CON SEGUIDOR */
 

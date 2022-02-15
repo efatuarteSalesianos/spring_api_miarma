@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,7 +47,7 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
                     .titulo(newPost.getTitulo())
                     .descripcion(newPost.getDescripcion())
                     .media(uri)
-                    .fechaPublicacion(LocalDateTime.now())
+                    .fechaPublicacion(LocalDate.now())
                     .tipo(newPost.getTipo())
                 .build());
     }

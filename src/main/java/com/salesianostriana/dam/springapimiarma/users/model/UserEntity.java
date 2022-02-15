@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,7 +39,7 @@ public class UserEntity implements UserDetails {
 
     private String full_name, direccion, telefono, avatar, password;
 
-    private LocalDateTime fecha_nacimiento;
+    private LocalDate fecha_nacimiento;
 
     @NaturalId
     @Column(unique = true, updatable = false)
@@ -50,6 +50,7 @@ public class UserEntity implements UserDetails {
 
     private ProfileType privacidad;
 
+    @Builder.Default
     @OneToMany(mappedBy = "propietario", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<Post> posts = new ArrayList<>();
 
@@ -67,6 +68,7 @@ public class UserEntity implements UserDetails {
     inverseJoinColumns = @JoinColumn(name="solicitado_id"))
     private List<UserEntity> solicitudes = new ArrayList<>();
 
+    @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "seguidor_id",
             foreignKey = @ForeignKey(name="FK_SEGUIDOR")),

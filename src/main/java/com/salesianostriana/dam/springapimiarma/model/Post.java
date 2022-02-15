@@ -8,7 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -37,7 +37,7 @@ public class Post implements Serializable {
     private String titulo, descripcion, media;
 
     @CreatedDate
-    private LocalDateTime fechaPublicacion;
+    private LocalDate fechaPublicacion;
 
     private PostType tipo;
 

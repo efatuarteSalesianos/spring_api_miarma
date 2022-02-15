@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor @AllArgsConstructor
@@ -34,7 +34,7 @@ public class CreateUserDto {
     private String full_name;
 
     @Past(message = "{userEntity.fecha_nacimiento.past}")
-    private LocalDateTime fecha_nacimiento;
+    private LocalDate fecha_nacimiento;
 
     @NotBlank(message = "{userEntity.direccion.blank}")
     private String direccion;

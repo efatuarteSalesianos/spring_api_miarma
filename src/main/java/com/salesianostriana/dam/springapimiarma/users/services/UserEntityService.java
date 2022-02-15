@@ -53,11 +53,17 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
 
         if(newUser.getPassword().contentEquals(newUser.getVerifyPassword())) {
             UserEntity userEntity = UserEntity.builder()
-                    .email(newUser.getEmail())
                     .full_name(newUser.getFull_name())
+                    .direccion(newUser.getDireccion())
+                    .telefono(newUser.getAvatar())
+                    .email(newUser.getEmail())
+                    .nickname(newUser.getNickname())
                     .avatar(uri)
+                    .fecha_nacimiento(newUser.getFecha_nacimiento())
+                    .privacidad(newUser.getPrivacidad())
                     .password(passwordEncoder.encode(newUser.getPassword()))
                     .build();
+
             return save(userEntity);
         }
         else {
