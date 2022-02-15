@@ -86,8 +86,8 @@ public class PostController {
                     content = @Content)
     })
     @GetMapping("/{nickname}")
-    public List<GetPostListDto> listPostsByNick(@PathVariable String nickname) {
-        return service.postByNickname(nickname);
+    public List<GetPostListDto> listPostsByNick(@PathVariable String nickname, @AuthenticationPrincipal UserEntity user) {
+        return service.postByNickname(nickname, user);
     }
 
     @Operation(summary = "Se muestra un listado con todos los Posts del usuario logueado")
@@ -105,7 +105,7 @@ public class PostController {
     })
     @GetMapping("/me")
     public List<GetPostListDto> listPostsMe(@AuthenticationPrincipal UserEntity user) {
-        return service.postByNickname(user.getUsername());
+        return service.postByNickname(user.getUsername(), user);
     }
 
     @Operation(summary = "Se muestran los detalles de un Post")

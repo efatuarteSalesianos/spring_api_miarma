@@ -95,11 +95,19 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
         }
     }
 
-    public List<GetPostListDto> postByNickname(String nick) {
+    public List<GetPostListDto> postByNickname(String nick, UserEntity user) {
         if (!userEntityRepository.existsByNickname(nick)) {
             throw new UsernameNotFoundException(nick + " no encontrado");
         } else {
-            return repository.postsByUser(nick).stream().map(dtoConverter::postToGetPostListDto).collect(Collectors.toList());
+            Optional<UserEntity> encontrado = userEntityRepository.findFirstByNickname(nick);
+            if (encontrado.isEmpty())
+                throw new SingleEntityNotFoundException(nick, UserEntity.class);
+            else {
+                if (encontrado.get().getSeguidores().contains(user))
+                    return repository.postsByUser(nick).stream().map(dtoConverter::postToGetPostListDto).collect(Collectors.toList());
+                else
+                    return repository.publicPostsByUser(nick).stream().map(dtoConverter::postToGetPostListDto).collect(Collectors.toList());
+            }
         }
     }
 
