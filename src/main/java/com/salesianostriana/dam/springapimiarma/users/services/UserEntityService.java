@@ -2,7 +2,6 @@ package com.salesianostriana.dam.springapimiarma.users.services;
 
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccountException;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.SingleEntityNotFoundException;
-import com.salesianostriana.dam.springapimiarma.ficheros.service.FileSystemStorageService;
 import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
 import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
 import com.salesianostriana.dam.springapimiarma.users.dto.CreateUserDto;
@@ -31,7 +30,6 @@ import static com.salesianostriana.dam.springapimiarma.users.model.ProfileType.P
 public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityRepository> implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
-    private final FileSystemStorageService fileSystemStorageService;
     private final UserDtoConverter dtoConverter;
     private final UserEntityRepository userEntityRepository;
     private final StorageService storageService;
@@ -54,6 +52,11 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
         if(newUser.getPassword().contentEquals(newUser.getVerifyPassword())) {
             UserEntity userEntity = UserEntity.builder()
                     .full_name(newUser.getFull_name())
+                    .fecha_nacimiento(newUser.getFecha_nacimiento())
+                    .direccion(newUser.getDireccion())
+                    .email(newUser.getEmail())
+                    .nickname(newUser.getNickname())
+                    .avatar(uri)
                     .direccion(newUser.getDireccion())
                     .telefono(newUser.getAvatar())
                     .email(newUser.getEmail())
