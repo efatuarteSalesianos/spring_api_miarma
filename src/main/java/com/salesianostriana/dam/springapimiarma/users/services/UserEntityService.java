@@ -4,10 +4,7 @@ import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccou
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.SingleEntityNotFoundException;
 import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
 import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
-import com.salesianostriana.dam.springapimiarma.users.dto.CreateUserDto;
-import com.salesianostriana.dam.springapimiarma.users.dto.GetFollowDto;
-import com.salesianostriana.dam.springapimiarma.users.dto.GetUserDto;
-import com.salesianostriana.dam.springapimiarma.users.dto.UserDtoConverter;
+import com.salesianostriana.dam.springapimiarma.users.dto.*;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import com.salesianostriana.dam.springapimiarma.users.repositories.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,12 +56,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
                     .email(newUser.getEmail())
                     .nickname(newUser.getNickname())
                     .avatar(uri)
-                    .direccion(newUser.getDireccion())
-                    .telefono(newUser.getAvatar())
-                    .email(newUser.getEmail())
-                    .nickname(newUser.getNickname())
-                    .avatar(uri)
-                    .fecha_nacimiento(newUser.getFecha_nacimiento())
+                    .telefono(newUser.getTelefono())
                     .privacidad(newUser.getPrivacidad())
                     .password(passwordEncoder.encode(newUser.getPassword()))
                     .build();
@@ -90,5 +82,46 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
 
     public List<GetFollowDto> findAllPeticionesSeguimiento(UserEntity user) {
         return userEntityRepository.findAllSolicitudesById(user.getId()).stream().map(dtoConverter::convertFollowToGetFollowDto).toList();
+    }
+
+    public GetUserDto editProfile(UserEntity logueado, SaveUserDto user, MultipartFile file) {
+
+        if (!file.isEmpty()) {
+            if (file.getContentType().equals("image/jpeg")) {
+
+                String filename = storageService.storeAndResize(file);
+
+                String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/download/")
+                        .path(filename)
+                        .toUriString();
+
+                logueado.setFull_name(user.getFull_name());
+                logueado.setFecha_nacimiento(user.getFecha_nacimiento());
+                logueado.setDireccion(user.getDireccion());
+                logueado.setEmail(user.getEmail());
+                logueado.setNickname(user.getNickname());
+                logueado.setAvatar(uri);
+                logueado.setTelefono(user.getTelefono());
+                logueado.setPrivacidad(user.getPrivacidad());
+
+                return dtoConverter.convertUserEntityToGetUserDto(save(logueado));
+            }
+            else
+                return null;
+        } else {
+
+            logueado.setFull_name(user.getFull_name());
+            logueado.setFecha_nacimiento(user.getFecha_nacimiento());
+            logueado.setDireccion(user.getDireccion());
+            logueado.setEmail(user.getEmail());
+            logueado.setNickname(user.getNickname());
+            logueado.setAvatar(user.getAvatar());
+            logueado.setTelefono(user.getAvatar());
+            logueado.setPrivacidad(user.getPrivacidad());
+
+            return dtoConverter.convertUserEntityToGetUserDto(save(logueado));
+        }
+
     }
 }

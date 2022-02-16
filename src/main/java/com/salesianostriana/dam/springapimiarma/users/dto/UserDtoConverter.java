@@ -19,7 +19,8 @@ public class UserDtoConverter {
                 .id(user.getId())
                 .full_name(user.getFull_name())
                 .direccion(user.getDireccion())
-                .telefono(user.getDireccion())
+                .telefono(user.getTelefono())
+                .email(user.getEmail())
                 .nickname(user.getNickname())
                 .avatar(user.getAvatar())
                 .fecha_nacimiento(user.getFecha_nacimiento())
@@ -51,12 +52,27 @@ public class UserDtoConverter {
                 .builder()
                 .full_name(newUser.getFull_name())
                 .direccion(newUser.getDireccion())
-                .telefono(newUser.getDireccion())
+                .telefono(newUser.getTelefono())
+                .email(newUser.getEmail())
                 .nickname(newUser.getNickname())
                 .avatar(newUser.getAvatar())
                 .password(newUser.getPassword())
                 .fecha_nacimiento(newUser.getFecha_nacimiento())
                 .privacidad(newUser.getPrivacidad())
+                .build();
+    }
+
+    public UserEntity convertSaveUserDtoToUserEntity(SaveUserDto user) {
+        return UserEntity
+                .builder()
+                .full_name(user.getFull_name())
+                .direccion(user.getDireccion())
+                .telefono(user.getTelefono())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .avatar(user.getAvatar())
+                .fecha_nacimiento(user.getFecha_nacimiento())
+                .privacidad(user.getPrivacidad())
                 .build();
     }
 

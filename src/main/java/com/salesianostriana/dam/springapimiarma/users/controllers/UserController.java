@@ -1,10 +1,7 @@
 package com.salesianostriana.dam.springapimiarma.users.controllers;
 
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccountException;
-import com.salesianostriana.dam.springapimiarma.users.dto.CreateUserDto;
-import com.salesianostriana.dam.springapimiarma.users.dto.GetFollowDto;
-import com.salesianostriana.dam.springapimiarma.users.dto.GetUserDto;
-import com.salesianostriana.dam.springapimiarma.users.dto.UserDtoConverter;
+import com.salesianostriana.dam.springapimiarma.users.dto.*;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import com.salesianostriana.dam.springapimiarma.users.services.UserEntityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -72,6 +69,24 @@ public class UserController {
     @GetMapping("/profile/{id}")
     public GetUserDto findProfileById(@PathVariable UUID id, @AuthenticationPrincipal UserEntity user) throws PrivateAccountException {
         return userEntityService.findUserProfileById(id, user);
+    }
+
+    @Operation(summary = "Se edita el perfil del usuario logueado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se muestra el perfil del usuario con los datos editados",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserEntity.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "Los datos son erróneos",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Acceso denegado",
+                    content = @Content)
+    })
+    @PutMapping("/profile/me")
+    public GetUserDto editMyPrfile(@AuthenticationPrincipal UserEntity logueado, @RequestPart("save_user") SaveUserDto user, @RequestPart("file") MultipartFile file) {
+        return userEntityService.editProfile(logueado, user, file);
     }
 
     @Operation(summary = "Se listan todas las peticiones de seguimiento dentro de la aplicación")
