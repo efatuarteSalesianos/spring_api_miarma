@@ -15,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,21 +62,5 @@ public class AuthenticationController {
                 .body(jwtUserConverter.convertUserToJwtUserResponse(user, jwt));
     }
 
-    @Operation(summary = "Se muestra la información del usuario logueado")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Se muestra correctamente la información del usuario",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserEntity.class))}),
-            @ApiResponse(responseCode = "400",
-                    description = "Hay un error en los datos",
-                    content = @Content),
-            @ApiResponse(responseCode = "403",
-                    description = "Acceso denegado",
-                    content = @Content)
-    })
-    @GetMapping("/me")
-    public ResponseEntity<?> quienSoy(@AuthenticationPrincipal UserEntity user){
-        return ResponseEntity.ok(jwtUserConverter.convertUserToJwtUserResponse(user, null));
-    }
+
 }

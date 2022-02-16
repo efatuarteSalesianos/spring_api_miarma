@@ -5,6 +5,7 @@ import com.salesianostriana.dam.springapimiarma.errores.excepciones.SingleEntity
 import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
 import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
 import com.salesianostriana.dam.springapimiarma.users.dto.*;
+import com.salesianostriana.dam.springapimiarma.users.model.Rol;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import com.salesianostriana.dam.springapimiarma.users.repositories.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,6 +55,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
                     .email(newUser.getEmail())
                     .nickname(newUser.getNickname())
                     .avatar(uri)
+                    .rol(Rol.USER)
                     .telefono(newUser.getTelefono())
                     .privacidad(newUser.getPrivacidad())
                     .password(passwordEncoder.encode(newUser.getPassword()))
@@ -73,7 +73,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
         if (encontrado.isEmpty())
             throw new SingleEntityNotFoundException(id.toString(), UserEntity.class);
         else {
-            if (encontrado.get().getPrivacidad() == PUBLIC || encontrado.get().getSeguidores().contains(user))
+            if (encontrado.get().getPrivacidad() == PUBLIC || encontrado.get().getSeguidores_list().contains(user))
                 return dtoConverter.convertUserEntityToGetUserDto(encontrado.get());
             else
                 throw new PrivateAccountException("No se pudo mostrar el perfil del usuario que buscas, ya que su cuenta es privada y no te encuentras entre sus seguidores.");

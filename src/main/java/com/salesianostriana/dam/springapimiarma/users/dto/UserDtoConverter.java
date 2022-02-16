@@ -26,7 +26,7 @@ public class UserDtoConverter {
                 .fecha_nacimiento(user.getFecha_nacimiento())
                 .privacidad(user.getPrivacidad())
                 .posts(user.getPosts().stream().map(postDtoConverter::postToGetPostDto).collect(Collectors.toList()))
-                .numSeguidores(user.getSeguidores().size())
+                .numSeguidores(user.getSeguidores_list().size())
                 .build();
     }
 
@@ -42,8 +42,8 @@ public class UserDtoConverter {
     public GetFollowDto convertFollowToGetFollowDto(Follow f) {
         return GetFollowDto.builder()
                 .id(f.getId())
-                .seguidor(this.convertUserEntityToGetBasicUserDto(f.getSeguidor()))
-                .usuario(this.convertUserEntityToGetBasicUserDto(f.getUsuario()))
+                .seguidor(this.convertUserEntityToGetBasicUserDto(f.getFollower()))
+                .usuario(this.convertUserEntityToGetBasicUserDto(f.getSeguido()))
                 .build();
     }
 

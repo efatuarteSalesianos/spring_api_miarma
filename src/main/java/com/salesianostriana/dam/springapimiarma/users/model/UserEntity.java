@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Parameter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -48,61 +49,34 @@ public class UserEntity implements UserDetails {
     @Column(unique = true, updatable = false)
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
+
     private ProfileType privacidad;
 
     @Builder.Default
-    @OneToMany(mappedBy = "propietario", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "propietario", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
-   /* @Builder.Default
-    @OneToMany(mappedBy = "seguidor", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<Follow> peticiones_seguimiento = new ArrayList<>();
+    @Builder.Default
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.MERGE)
+    private List<Solicitud> solicitudes_seguimiento = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<Follow> solicitudes_seguimiento = new ArrayList<>();*/
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="solicutud_seguimiento",
-    joinColumns = @JoinColumn(name="solicitante_id"),
-    inverseJoinColumns = @JoinColumn(name="solicitado_id"))
-    private List<UserEntity> solicitudes = new ArrayList<>();
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.MERGE)
+    private List<Solicitud> peticiones_seguimiento = new ArrayList<>();
 
     @Builder.Default
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(joinColumns = @JoinColumn(name = "seguidor_id",
-            foreignKey = @ForeignKey(name="FK_SEGUIDOR")),
-            inverseJoinColumns = @JoinColumn(name = "seguido_id",
-                    foreignKey = @ForeignKey(name="FK_SEGUIDO")),
-            name = "relaciones_user"
-    )
-    private List<UserEntity> seguidores = new ArrayList<>();
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private List<Follow> seguidores_list = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "seguidores", fetch = FetchType.EAGER)
-    private List<UserEntity> seguidos = new ArrayList<>();
-
-    ////////////////////////////////////////////
-    /* HELPERS de la asociación con Seguidor*/
-    ////////////////////////////////////////////
-
-    public void addSeguidor(UserEntity u) {
-        if (this.getSeguidores() == null)
-            this.setSeguidores(new ArrayList<>());
-        this.getSeguidores().add(u);
-
-        if (u.getSeguidores() == null)
-            u.setSeguidores(new ArrayList<>());
-        u.getSeguidores().add(this);
-    }
-
-    public void removeSeguidor(UserEntity u) {
-        u.getSeguidores().remove(this);
-        this.getSeguidores().remove(u);
-    }
+    @Builder.Default
+    @OneToMany(mappedBy = "seguido", cascade = CascadeType.MERGE)
+    private List<Follow> seguidos_list = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));
     }
 
     @Override

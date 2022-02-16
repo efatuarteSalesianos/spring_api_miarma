@@ -18,7 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +28,24 @@ public class UserController {
 
     private final UserEntityService userEntityService;
     private final UserDtoConverter userDtoConverter;
+
+    @Operation(summary = "Se muestra la información del usuario logueado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se muestra correctamente la información del usuario",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserEntity.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "Hay un error en los datos",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Acceso denegado",
+                    content = @Content)
+    })
+    @GetMapping("/me")
+    public ResponseEntity<?> quienSoy(@AuthenticationPrincipal UserEntity user){
+        return ResponseEntity.ok(userDtoConverter.convertUserEntityToGetUserDto(user));
+    }
 
     @Operation(summary = "Se añade un usuario")
     @ApiResponses(value = {

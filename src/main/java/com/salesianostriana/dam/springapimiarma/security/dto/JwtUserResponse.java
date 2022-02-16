@@ -13,6 +13,7 @@ public class JwtUserResponse {
     private String nickname;
     private String fullName;
     private String avatar;
+    private String rol;
     private String token;
 
 }

@@ -1,7 +1,6 @@
 package com.salesianostriana.dam.springapimiarma.users.dto;
 
 import com.salesianostriana.dam.springapimiarma.users.model.ProfileType;
-import com.salesianostriana.dam.springapimiarma.validacion.simple.anotaciones.StrongPassword;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

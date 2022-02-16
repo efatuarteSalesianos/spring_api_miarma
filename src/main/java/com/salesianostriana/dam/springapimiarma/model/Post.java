@@ -12,10 +12,8 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+@NoArgsConstructor @AllArgsConstructor
+@Getter @Setter
 @Builder
 public class Post implements Serializable {
 
@@ -41,6 +39,7 @@ public class Post implements Serializable {
 
     private PostType tipo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "propietario_id")
     private UserEntity propietario;
 }

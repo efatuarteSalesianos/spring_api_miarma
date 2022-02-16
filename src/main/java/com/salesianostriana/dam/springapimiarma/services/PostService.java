@@ -71,7 +71,7 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
         } else {
             UserEntity usuario = result.get().getPropietario();
 
-            if (result.get().getTipo() == PUBLIC || usuario.getSeguidores().contains(user))
+            if (result.get().getTipo() == PUBLIC || usuario.getSeguidores_list().contains(user))
                 return result.map(dtoConverter::postToGetPostDto).get();
             else
                 throw new PrivateAccountException("No puedes ver el post de este usuario, ya que no le sigues");
@@ -104,7 +104,7 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
             if (encontrado.isEmpty())
                 throw new SingleEntityNotFoundException(nick, UserEntity.class);
             else {
-                if (encontrado.get().getPrivacidad() == ProfileType.PUBLIC || encontrado.get().getSeguidores().contains(user))
+                if (encontrado.get().getPrivacidad() == ProfileType.PUBLIC || encontrado.get().getSeguidores_list().contains(user))
                     return repository.postsByUser(nick).stream().map(dtoConverter::postToGetPostListDto).collect(Collectors.toList());
                 else
                     return repository.publicPostsByUser(nick).stream().map(dtoConverter::postToGetPostListDto).collect(Collectors.toList());

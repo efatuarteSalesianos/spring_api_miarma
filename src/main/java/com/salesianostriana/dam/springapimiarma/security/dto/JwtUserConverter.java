@@ -12,6 +12,7 @@ public class JwtUserConverter {
                 .fullName(user.getFull_name())
                 .nickname(user.getNickname())
                 .avatar(user.getAvatar())
+                .rol(user.getRol().getValue())
                 .token(jwt)
                 .build();
     }

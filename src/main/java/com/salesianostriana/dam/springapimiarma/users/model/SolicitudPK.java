@@ -12,8 +12,8 @@ import java.util.UUID;
 @Embeddable
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
-public class FollowPK implements Serializable {
+public class SolicitudPK implements Serializable {
 
-    private UUID follower_id;
-    private UUID seguido_id;
+    private UUID sender_id;
+    private UUID receiver_id;
 }

@@ -5,7 +5,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
@@ -13,21 +12,21 @@ import java.time.LocalDate;
 @Getter @Setter
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class Follow implements Serializable {
+public class Solicitud {
 
     @Builder.Default
     @EmbeddedId
-    private FollowPK id = new FollowPK();
+    private SolicitudPK id = new SolicitudPK();
 
     @ManyToOne
-    @MapsId("follower_id")
-    @JoinColumn(name = "follower_id")
-    private UserEntity follower;
+    @MapsId("sender_id")
+    @JoinColumn(name = "sender_id")
+    private UserEntity sender;
 
     @ManyToOne
-    @MapsId("seguido_id")
-    @JoinColumn(name = "seguido_id")
-    private UserEntity seguido;
+    @MapsId("receiver_id")
+    @JoinColumn(name = "receiver_id")
+    private UserEntity receiver;
 
     @CreatedDate
     private LocalDate createdDate;
