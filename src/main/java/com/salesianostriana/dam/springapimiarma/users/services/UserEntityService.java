@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,7 +44,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
 
     public UserEntity save(CreateUserDto newUser, MultipartFile file) {
 
-        String filename = storageService.store(file);
+        String filename = storageService.storeAndResize(file);
 
         String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/download/")

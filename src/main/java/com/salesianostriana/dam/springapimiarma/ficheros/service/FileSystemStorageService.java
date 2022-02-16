@@ -15,10 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -82,26 +79,48 @@ public class FileSystemStorageService implements StorageService {
 
     }
 
-    public static byte [] storeAndResize (MultipartFile file) {
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
-        String extension = StringUtils.getFilenameExtension(filename);
+    public String storeAndResize (MultipartFile file) {
 
-        BufferedImage original = null;
+        String newFilename = "";
 
         try {
-            original = ImageIO.read(
-                    new ByteArrayInputStream(file.getBytes())
+            byte[] byteImg = Files.readAllBytes(Paths.get(file.getOriginalFilename()));
+
+            BufferedImage original = ImageIO.read(
+                    new ByteArrayInputStream(byteImg)
             );
-            BufferedImage scaled = Scalr.resize(original,512);
 
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(scaled, extension, os);
-            return os.toByteArray();
+            BufferedImage scaled = Scalr.resize(original, 512);
 
-        } catch (IOException e) {
-            throw new StorageException("Failed to resize file: " + file.getOriginalFilename(), e);
+            File img = new File(file.getOriginalFilename());
+
+            ImageIO.write(scaled, "jpg", img);
+
+            String extension = StringUtils.getFilenameExtension(img.getName());
+
+
+            newFilename = img.getName();
+            while (Files.exists(rootLocation.resolve(newFilename))) {
+                String name = newFilename.replace("." + extension, "");
+
+                String suffix = Long.toString(System.currentTimeMillis());
+                suffix = suffix.substring(suffix.length() - 6);
+
+                newFilename = name + "_" + suffix + "." + extension;
+
+            }
+
+            InputStream imgInput = new FileInputStream(img);
+
+            try (InputStream inputStream = imgInput) {
+                Files.copy(inputStream, rootLocation.resolve(newFilename),
+                        StandardCopyOption.REPLACE_EXISTING);
+            }
+
+        } catch (IOException ex) {
+            throw new StorageException("Error en el almacenamiento del fichero: " + newFilename, ex);
         }
-
+        return newFilename;
     }
 
     @Override

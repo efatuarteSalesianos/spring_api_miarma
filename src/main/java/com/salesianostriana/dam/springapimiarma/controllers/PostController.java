@@ -50,7 +50,7 @@ public class PostController {
                     content = @Content)
     })
     @PostMapping("/")
-    public ResponseEntity<Post> nuevoPost(@Valid @RequestBody CreatePostDto nuevoPost, @RequestPart("file") MultipartFile file) {
+    public ResponseEntity<Post> nuevoPost(@Valid @RequestPart("post") CreatePostDto nuevoPost, @RequestPart("file") MultipartFile file) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(nuevoPost, file));
     }
 
