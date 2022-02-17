@@ -131,6 +131,42 @@ public class UserController {
         return solicitudService.sendSolicitudSeguimiento(user, nick);
     }
 
+    @Operation(summary = "Se acepta la solicitud de seguimiento de un usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Se ha aceptado correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserEntity.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "El usuario al que se intenta aceptar no existe",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Acceso denegado",
+                    content = @Content)
+    })
+    @PostMapping("/follow/accept/{nick}")
+    public GetFollowDto aceptarSolicitud(@PathVariable String nick, @AuthenticationPrincipal UserEntity user) {
+        return followService.aceptarSolicitudSeguimiento(nick, user);
+    }
+
+    @Operation(summary = "Se rechaza la solicitud de seguimiento de un usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Se ha rechazado correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserEntity.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "El usuario al que se intenta aceptar no existe",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Acceso denegado",
+                    content = @Content)
+    })
+    @DeleteMapping("/follow/decline/{nick}")
+    public GetFollowDto rechazarSolicitud(@PathVariable String nick, @AuthenticationPrincipal UserEntity user) {
+        return followService.eliminarSolicitudSeguimiento(nick, user);
+    }
+
     @Operation(summary = "Se listan todas las peticiones de seguimiento dentro de la aplicación")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "20",
