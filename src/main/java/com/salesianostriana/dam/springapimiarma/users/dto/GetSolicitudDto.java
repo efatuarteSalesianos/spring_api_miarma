@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.springapimiarma.users.dto;
 
 import com.salesianostriana.dam.springapimiarma.users.model.FollowPK;
+import com.salesianostriana.dam.springapimiarma.users.model.SolicitudPK;
 import lombok.*;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @Builder
 public class GetSolicitudDto implements Serializable {
 
+    private SolicitudPK id;
     private GetBasicUserDto sender;
     private GetBasicUserDto receiver;
 }

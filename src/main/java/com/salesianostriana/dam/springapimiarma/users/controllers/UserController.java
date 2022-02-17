@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.springapimiarma.users.controllers;
 
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccountException;
+import com.salesianostriana.dam.springapimiarma.errores.excepciones.SolicitudAlreadyExistException;
 import com.salesianostriana.dam.springapimiarma.users.dto.*;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import com.salesianostriana.dam.springapimiarma.users.services.FollowService;
@@ -109,6 +110,24 @@ public class UserController {
     @PutMapping("/profile/me")
     public GetUserDto editMyPrfile(@AuthenticationPrincipal UserEntity logueado, @RequestPart("save_user") SaveUserDto user, @RequestPart("file") MultipartFile file) {
         return userEntityService.editProfile(logueado, user, file);
+    }
+
+    @Operation(summary = "Se añade una petición de seguimiento")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Se ha creado correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserEntity.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "El usuario al que se intenta seguir no existe",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Acceso denegado",
+                    content = @Content)
+    })
+    @PostMapping("/follow/{nickname}")
+    public GetSolicitudDto enviarSolicitud(@PathVariable String nick, @AuthenticationPrincipal UserEntity user) throws SolicitudAlreadyExistException {
+        return solicitudService.sendSolicitudSeguimiento(user, nick);
     }
 
     @Operation(summary = "Se listan todas las peticiones de seguimiento dentro de la aplicación")

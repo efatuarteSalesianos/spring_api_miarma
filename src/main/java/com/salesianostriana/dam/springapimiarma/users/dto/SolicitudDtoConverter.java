@@ -13,6 +13,7 @@ public class SolicitudDtoConverter {
 
     public GetSolicitudDto convertSolicitudToGetSolicitudDto(Solicitud s) {
         return GetSolicitudDto.builder()
+                .id(s.getId())
                 .sender(userDtoConverter.convertUserEntityToGetBasicUserDto(s.getSender()))
                 .receiver(userDtoConverter.convertUserEntityToGetBasicUserDto(s.getReceiver()))
                 .build();
