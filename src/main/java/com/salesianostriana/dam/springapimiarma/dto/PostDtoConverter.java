@@ -35,7 +35,7 @@ public class PostDtoConverter {
                 .id(p.getId())
                 .titulo(p.getTitulo())
                 .descripcion(p.getDescripcion())
-                .media(p.getMedia())
+                .mediaResize(p.getMediaResized())
                 .build();
     }
 }

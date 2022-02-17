@@ -11,6 +11,6 @@ import java.util.UUID;
 public class GetPostListDto {
 
     private UUID id;
-    private String titulo, descripcion, media;
+    private String titulo, descripcion, mediaResize;
     private GetUserDto propietario;
 }

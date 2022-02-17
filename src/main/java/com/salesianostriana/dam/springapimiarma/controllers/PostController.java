@@ -141,8 +141,8 @@ public class PostController {
                     content = @Content)
     })
     @PutMapping("/{id}")
-    public GetPostDto editarPost(@Parameter(description = "El id del Post que se busca") @PathVariable UUID id, @Valid @RequestBody SavePostDto post) {
-        return service.edit(id, post);
+    public GetPostDto editarPost(@Parameter(description = "El id del Post que se busca") @PathVariable UUID id, @Valid @RequestPart("post") SavePostDto post, @RequestPart("file") MultipartFile file) {
+        return service.edit(id, post, file);
 
     }
 

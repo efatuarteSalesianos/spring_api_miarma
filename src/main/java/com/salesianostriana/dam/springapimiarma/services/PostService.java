@@ -43,10 +43,18 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
                 .path(filename)
                 .toUriString();
 
+        String filenameResize = storageService.storeAndResize(file);
+
+        String uriResize = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/download/")
+                .path(filenameResize)
+                .toUriString();
+
         return repository.save(Post.builder()
                     .titulo(newPost.getTitulo())
                     .descripcion(newPost.getDescripcion())
                     .media(uri)
+                    .mediaResized(uriResize)
                     .fechaPublicacion(LocalDate.now())
                     .tipo(newPost.getTipo())
                 .build());
@@ -78,21 +86,49 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
         }
     }
 
-    public GetPostDto edit(UUID id, SavePostDto post) {
+    public GetPostDto edit(UUID id, SavePostDto post, MultipartFile file) {
 
         Optional<Post> encontrado = repositorio.findById(id);
 
         if (encontrado.isEmpty()) {
             throw new SingleEntityNotFoundException(id.toString(), Post.class);
         } else {
-            return encontrado.map(c -> {
-                        c.setTitulo(post.getTitulo());
-                        c.setDescripcion(post.getDescripcion());
-                        c.setMedia(post.getMedia());
-                        repositorio.save(c);
-                        return c;
-                    })
-                    .map(dtoConverter::postToGetPostDto).get();
+
+            if (!file.isEmpty()) {
+                if (file.getContentType().equals("image/jpeg")) {
+
+                    String filename = storageService.storeAndResize(file);
+
+                    String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .path("/download/")
+                            .path(filename)
+                            .toUriString();
+
+                    String filenameResize = storageService.storeAndResize(file);
+
+                    String uriResize = ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .path("/download/")
+                            .path(filenameResize)
+                            .toUriString();
+
+                    encontrado.get().setTitulo(post.getTitulo());
+                    encontrado.get().setDescripcion(post.getDescripcion());
+                    encontrado.get().setMedia(uri);
+                    encontrado.get().setMediaResized(uriResize);
+
+                    return dtoConverter.postToGetPostDto(encontrado.get());
+                }
+                else
+                    return null;
+            }
+            else {
+
+                encontrado.get().setTitulo(post.getTitulo());
+                encontrado.get().setDescripcion(post.getDescripcion());
+                encontrado.get().setMedia(post.getMedia());
+
+                return dtoConverter.postToGetPostDto(encontrado.get());
+            }
         }
     }
 
