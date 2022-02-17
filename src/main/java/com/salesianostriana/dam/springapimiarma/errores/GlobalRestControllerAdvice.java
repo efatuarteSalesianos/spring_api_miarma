@@ -1,10 +1,14 @@
 package com.salesianostriana.dam.springapimiarma.errores;
 
+import com.salesianostriana.dam.springapimiarma.errores.excepciones.BadRequestException;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.EntityNotFoundException;
+import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccountException;
+import com.salesianostriana.dam.springapimiarma.errores.excepciones.SolicitudAlreadyExistException;
 import com.salesianostriana.dam.springapimiarma.errores.modelo.ApiError;
 import com.salesianostriana.dam.springapimiarma.errores.modelo.ApiSubError;
 import com.salesianostriana.dam.springapimiarma.errores.modelo.ApiValidationSubError;
 import org.hibernate.validator.internal.engine.path.PathImpl;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +49,21 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
                                 .build())
                         .collect(Collectors.toList())
                 );
+    }
+
+    @ExceptionHandler({PrivateAccountException.class})
+    public ResponseEntity<?> handlePrivateAccountException(PrivateAccountException ex, WebRequest request) {
+        return buildApiError400(ex, request);
+    }
+
+    @ExceptionHandler({SolicitudAlreadyExistException.class})
+    public ResponseEntity<?> handleSolicitudAlreadyExistException(SolicitudAlreadyExistException ex, WebRequest request) {
+        return buildApiError400(ex, request);
+    }
+
+    @ExceptionHandler({BadRequestException.class})
+    public ResponseEntity<?> handleBadRequestException(BadRequestException ex, WebRequest request) {
+        return buildApiError400(ex, request);
     }
 
     @Override
