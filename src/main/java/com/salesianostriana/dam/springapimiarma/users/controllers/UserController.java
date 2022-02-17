@@ -3,6 +3,8 @@ package com.salesianostriana.dam.springapimiarma.users.controllers;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccountException;
 import com.salesianostriana.dam.springapimiarma.users.dto.*;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
+import com.salesianostriana.dam.springapimiarma.users.services.FollowService;
+import com.salesianostriana.dam.springapimiarma.users.services.SolicitudService;
 import com.salesianostriana.dam.springapimiarma.users.services.UserEntityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,6 +29,9 @@ import java.util.UUID;
 public class UserController {
 
     private final UserEntityService userEntityService;
+    private final FollowService followService;
+    private final SolicitudService solicitudService;
+
     private final UserDtoConverter userDtoConverter;
 
     @Operation(summary = "Se muestra la información del usuario logueado")
@@ -120,8 +125,8 @@ public class UserController {
                     content = @Content)
     })
     @GetMapping("/follow/list")
-    public List<GetFollowDto> findAllFollows(@AuthenticationPrincipal UserEntity user) {
-        return userEntityService.findAllPeticionesSeguimiento(user);
+    public List<GetSolicitudDto> findAllFollows(@AuthenticationPrincipal UserEntity user) {
+        return solicitudService.findAllPeticionesSeguimiento(user);
     }
 
 }

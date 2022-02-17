@@ -8,8 +8,7 @@ import lombok.*;
 @Builder
 public class GetFollowDto {
 
-    private FollowPK id;
-    private GetBasicUserDto seguidor;
-    private GetBasicUserDto usuario;
+    private GetBasicUserDto follower;
+    private GetBasicUserDto seguido;
 
 }

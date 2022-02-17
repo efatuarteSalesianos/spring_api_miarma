@@ -1,17 +1,15 @@
 package com.salesianostriana.dam.springapimiarma.users.repositories;
 
 import com.salesianostriana.dam.springapimiarma.users.model.Follow;
+import com.salesianostriana.dam.springapimiarma.users.model.Solicitud;
+import com.salesianostriana.dam.springapimiarma.users.model.SolicitudPK;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
-public interface UserEntityRepository extends JpaRepository<UserEntity, UUID> {
+public interface SolicitudRepository extends JpaRepository<Solicitud, SolicitudPK> {
 
-    Optional<UserEntity> findFirstByNickname(String nick);
-
-    boolean existsByNickname(String nickname);
+    List<Solicitud> findAllSolicitudesByReceiver(UserEntity user);
 
 }

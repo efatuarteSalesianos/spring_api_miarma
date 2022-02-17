@@ -39,14 +39,6 @@ public class UserDtoConverter {
                 .build();
     }
 
-    public GetFollowDto convertFollowToGetFollowDto(Follow f) {
-        return GetFollowDto.builder()
-                .id(f.getId())
-                .seguidor(this.convertUserEntityToGetBasicUserDto(f.getFollower()))
-                .usuario(this.convertUserEntityToGetBasicUserDto(f.getSeguido()))
-                .build();
-    }
-
     public UserEntity convertCreateUserDtoToUserEntity(CreateUserDto newUser) {
         return UserEntity
                 .builder()

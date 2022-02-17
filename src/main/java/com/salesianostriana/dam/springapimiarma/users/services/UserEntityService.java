@@ -29,7 +29,6 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
 
     private final PasswordEncoder passwordEncoder;
     private final UserDtoConverter dtoConverter;
-    private final UserEntityRepository userEntityRepository;
     private final StorageService storageService;
 
     @Override
@@ -78,10 +77,6 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
             else
                 throw new PrivateAccountException("No se pudo mostrar el perfil del usuario que buscas, ya que su cuenta es privada y no te encuentras entre sus seguidores.");
         }
-    }
-
-    public List<GetFollowDto> findAllPeticionesSeguimiento(UserEntity user) {
-        return userEntityRepository.findAllSolicitudesById(user.getId()).stream().map(dtoConverter::convertFollowToGetFollowDto).toList();
     }
 
     public GetUserDto editProfile(UserEntity logueado, SaveUserDto user, MultipartFile file) {
