@@ -4,6 +4,7 @@ import com.salesianostriana.dam.springapimiarma.dto.*;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.ListEntityNotFoundException;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccountException;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.SingleEntityNotFoundException;
+import com.salesianostriana.dam.springapimiarma.ficheros.errores.StorageException;
 import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
 import com.salesianostriana.dam.springapimiarma.model.Post;
 import com.salesianostriana.dam.springapimiarma.repositories.PostRepository;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,9 +35,13 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
     private final UserEntityRepository userEntityRepository;
     private final PostDtoConverter dtoConverter;
     private final StorageService storageService;
+    private final List<String> imagesType = new ArrayList<>(List.of("image/jpeg", "image/png", "image/jpg", "image/svg"));
+    private final List<String> videosType = new ArrayList<>(List.of("video/mp4", "image/avi", "image/mkv", "image/mov"));
 
     public Post save(CreatePostDto newPost, MultipartFile file) {
 
+        String filenameResize = "";
+        String uriResize = "";
         String filename = storageService.store(file);
 
         String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -43,9 +49,16 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
                 .path(filename)
                 .toUriString();
 
-        String filenameResize = storageService.storeAndResize(file);
+        if(imagesType.contains(file.getContentType()))
+            filenameResize = storageService.storeAndResizePostImage(file);
 
-        String uriResize = ServletUriComponentsBuilder.fromCurrentContextPath()
+        else if(videosType.contains(file.getContentType()))
+            filenameResize = storageService.storeAndResizePostVideo(file);
+
+        else
+            throw new StorageException("Formato de fichero no válido");
+
+        uriResize = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/download/")
                 .path(filenameResize)
                 .toUriString();
@@ -88,28 +101,38 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
 
     public GetPostDto edit(UUID id, SavePostDto post, MultipartFile file) {
 
+        String filenameResize = "";
+        String uriResize = "";
+
         Optional<Post> encontrado = repositorio.findById(id);
 
         if (encontrado.isEmpty()) {
             throw new SingleEntityNotFoundException(id.toString(), Post.class);
         } else {
-
             if (!file.isEmpty()) {
-                if (file.getContentType().equals("image/jpeg")) {
 
-                    String filename = storageService.storeAndResize(file);
+                String filename = storageService.store(file);
+                storageService.deleteFile(encontrado.get().getMedia().substring(encontrado.get().getMedia().lastIndexOf("/") + 1));
+                String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/download/")
+                        .path(filename)
+                        .toUriString();
 
-                    String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                            .path("/download/")
-                            .path(filename)
-                            .toUriString();
+                if(imagesType.contains(file.getContentType()))
+                    filenameResize = storageService.storeAndResizePostImage(file);
 
-                    String filenameResize = storageService.storeAndResize(file);
+                else if(videosType.contains(file.getContentType()))
+                    filenameResize = storageService.storeAndResizePostVideo(file);
 
-                    String uriResize = ServletUriComponentsBuilder.fromCurrentContextPath()
-                            .path("/download/")
-                            .path(filenameResize)
-                            .toUriString();
+                else
+                    throw new StorageException("Formato de fichero no válido");
+
+                storageService.deleteFile(encontrado.get().getMediaResized().substring(encontrado.get().getMediaResized().lastIndexOf("/") + 1));
+
+                uriResize = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/download/")
+                        .path(filenameResize)
+                        .toUriString();
 
                     encontrado.get().setTitulo(post.getTitulo());
                     encontrado.get().setDescripcion(post.getDescripcion());
@@ -117,18 +140,12 @@ public class PostService extends BaseService<Post, UUID, PostRepository> {
                     encontrado.get().setMediaResized(uriResize);
 
                     return dtoConverter.postToGetPostDto(encontrado.get());
-                }
-                else
-                    return null;
-            }
-            else {
-
+                } else {
                 encontrado.get().setTitulo(post.getTitulo());
                 encontrado.get().setDescripcion(post.getDescripcion());
                 encontrado.get().setMedia(post.getMedia());
-
-                return dtoConverter.postToGetPostDto(encontrado.get());
             }
+                return dtoConverter.postToGetPostDto(encontrado.get());
         }
     }
 

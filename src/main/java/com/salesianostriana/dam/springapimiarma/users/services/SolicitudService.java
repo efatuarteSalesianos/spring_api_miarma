@@ -49,7 +49,6 @@ public class SolicitudService {
                 throw new SolicitudAlreadyExistException("Ya has enviado una solicitud a este usuario");
             else {
                 receiver.getSolicitudes_seguimiento().add(solicitud);
-                user.getPeticiones_seguimiento().add(solicitud);
             }
 
         }

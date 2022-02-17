@@ -12,7 +12,11 @@ public interface StorageService {
 
     String store(MultipartFile file);
 
-    String storeAndResize(MultipartFile file);
+    String storeAndResizeAvatar(MultipartFile file);
+
+    String storeAndResizePostImage(MultipartFile file);
+
+    String storeAndResizePostVideo(MultipartFile file);
 
     Stream<Path> loadAll();
 

@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.springapimiarma.users.controllers;
 
+import com.salesianostriana.dam.springapimiarma.errores.excepciones.BadRequestException;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccountException;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.SolicitudAlreadyExistException;
 import com.salesianostriana.dam.springapimiarma.users.dto.*;
@@ -67,7 +68,7 @@ public class UserController {
                     content = @Content)
     })
     @PostMapping("/auth/register")
-    public ResponseEntity<GetUserDto> newUser(@Parameter(description = "El cuerpo con los atributos del nuevo usuario") @RequestPart("user") CreateUserDto newUser, @RequestPart("file") MultipartFile file) {
+    public ResponseEntity<GetUserDto> newUser(@Parameter(description = "El cuerpo con los atributos del nuevo usuario") @RequestPart("user") CreateUserDto newUser, @RequestPart("file") MultipartFile file) throws BadRequestException {
         UserEntity saved = userEntityService.save(newUser, file);
 
         if(saved == null)

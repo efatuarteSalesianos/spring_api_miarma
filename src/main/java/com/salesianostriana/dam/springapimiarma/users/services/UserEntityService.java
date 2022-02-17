@@ -1,7 +1,9 @@
 package com.salesianostriana.dam.springapimiarma.users.services;
 
+import com.salesianostriana.dam.springapimiarma.errores.excepciones.BadRequestException;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.PrivateAccountException;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.SingleEntityNotFoundException;
+import com.salesianostriana.dam.springapimiarma.ficheros.errores.StorageException;
 import com.salesianostriana.dam.springapimiarma.ficheros.service.StorageService;
 import com.salesianostriana.dam.springapimiarma.services.base.BaseService;
 import com.salesianostriana.dam.springapimiarma.users.dto.*;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,6 +33,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
     private final PasswordEncoder passwordEncoder;
     private final UserDtoConverter dtoConverter;
     private final StorageService storageService;
+    private final List<String> imagesType = new ArrayList<>(List.of("image/jpeg", "image/png", "image/jpg", "image/svg"));
 
     @Override
     public UserDetails loadUserByUsername(String nick) throws UsernameNotFoundException {
@@ -37,34 +41,38 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
                 .orElseThrow(()-> new UsernameNotFoundException(nick + " no encontrado"));
     }
 
-    public UserEntity save(CreateUserDto newUser, MultipartFile file) {
+    public UserEntity save(CreateUserDto newUser, MultipartFile file) throws BadRequestException {
 
-        String filename = storageService.storeAndResize(file);
+        if(imagesType.contains(file.getContentType())) {
 
-        String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/download/")
-                .path(filename)
-                .toUriString();
+            String filename = storageService.storeAndResizeAvatar(file);
+            String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/download/")
+                    .path(filename)
+                    .toUriString();
 
-        if(newUser.getPassword().contentEquals(newUser.getVerifyPassword())) {
-            UserEntity userEntity = UserEntity.builder()
-                    .full_name(newUser.getFull_name())
-                    .fecha_nacimiento(newUser.getFecha_nacimiento())
-                    .direccion(newUser.getDireccion())
-                    .email(newUser.getEmail())
-                    .nickname(newUser.getNickname())
-                    .avatar(uri)
-                    .rol(Rol.USER)
-                    .telefono(newUser.getTelefono())
-                    .privacidad(newUser.getPrivacidad())
-                    .password(passwordEncoder.encode(newUser.getPassword()))
-                    .build();
+            if(newUser.getPassword().contentEquals(newUser.getVerifyPassword())) {
+                UserEntity userEntity = UserEntity.builder()
+                        .full_name(newUser.getFull_name())
+                        .fecha_nacimiento(newUser.getFecha_nacimiento())
+                        .direccion(newUser.getDireccion())
+                        .email(newUser.getEmail())
+                        .nickname(newUser.getNickname())
+                        .avatar(uri)
+                        .rol(Rol.USER)
+                        .telefono(newUser.getTelefono())
+                        .privacidad(newUser.getPrivacidad())
+                        .password(passwordEncoder.encode(newUser.getPassword()))
+                        .build();
 
-            return save(userEntity);
+                return save(userEntity);
+            } else {
+                throw new BadRequestException("Las contraseñas no coinciden.");
+            }
+        } else {
+            throw new StorageException("No puedes subir un avatar con esa extensión");
         }
-        else {
-            return null;
-        }
+
     }
 
     public GetUserDto findUserProfileById(UUID id, UserEntity user) throws PrivateAccountException {
@@ -82,9 +90,10 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
     public GetUserDto editProfile(UserEntity logueado, SaveUserDto user, MultipartFile file) {
 
         if (!file.isEmpty()) {
-            if (file.getContentType().equals("image/jpeg")) {
+            if (imagesType.contains(file.getContentType())) {
 
-                String filename = storageService.storeAndResize(file);
+                String filename = storageService.storeAndResizeAvatar(file);
+                storageService.deleteFile(logueado.getAvatar().substring(logueado.getAvatar().lastIndexOf("/") + 1));
 
                 String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
                         .path("/download/")

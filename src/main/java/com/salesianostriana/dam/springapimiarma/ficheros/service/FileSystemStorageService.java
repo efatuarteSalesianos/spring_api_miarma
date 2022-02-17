@@ -2,8 +2,11 @@ package com.salesianostriana.dam.springapimiarma.ficheros.service;
 
 import com.salesianostriana.dam.springapimiarma.ficheros.errores.FileNotFoundException;
 import com.salesianostriana.dam.springapimiarma.ficheros.errores.StorageException;
+import com.salesianostriana.dam.springapimiarma.ficheros.utils.FileCompressor;
 import com.salesianostriana.dam.springapimiarma.ficheros.utils.MediaTypeUrlResource;
 import com.salesianostriana.dam.springapimiarma.ficheros.utils.StorageProperties;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -25,9 +28,13 @@ import java.util.stream.Stream;
 
 
 @Service
+@RequiredArgsConstructor
 public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
+
+    @Autowired
+    FileCompressor compressor;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
@@ -79,27 +86,19 @@ public class FileSystemStorageService implements StorageService {
 
     }
 
-    public String storeAndResize (MultipartFile file) {
+    public String storeAndResizeAvatar(MultipartFile file) {
 
+        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String extension = StringUtils.getFilenameExtension(filename);
         String newFilename = "";
 
         try {
-            byte[] byteImg = Files.readAllBytes(Paths.get(file.getOriginalFilename()));
+            byte[] byteImage = compressor.compressAvatar(file);
 
-            BufferedImage original = ImageIO.read(
-                    new ByteArrayInputStream(byteImg)
-            );
+            File image = new File(file.getOriginalFilename());
 
-            BufferedImage scaled = Scalr.resize(original, 512);
+            newFilename = image.getName();
 
-            File img = new File(file.getOriginalFilename());
-
-            ImageIO.write(scaled, "jpg", img);
-
-            String extension = StringUtils.getFilenameExtension(img.getName());
-
-
-            newFilename = img.getName();
             while (Files.exists(rootLocation.resolve(newFilename))) {
                 String name = newFilename.replace("." + extension, "");
 
@@ -110,13 +109,67 @@ public class FileSystemStorageService implements StorageService {
 
             }
 
-            InputStream imgInput = new FileInputStream(img);
+            FileUtils.writeByteArrayToFile(rootLocation.resolve(newFilename).toFile(), byteImage);
+            } catch (IOException ex) {
+                throw new StorageException("Error en el almacenamiento del fichero: " + newFilename, ex);
+            }
+        return newFilename;
+    }
 
-            try (InputStream inputStream = imgInput) {
-                Files.copy(inputStream, rootLocation.resolve(newFilename),
-                        StandardCopyOption.REPLACE_EXISTING);
+    public String storeAndResizePostImage(MultipartFile file) {
+
+        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String extension = StringUtils.getFilenameExtension(filename);
+        String newFilename = "";
+
+        try {
+            byte[] byteImage = compressor.compressPostImage(file);
+
+            File image = new File(file.getOriginalFilename());
+
+            newFilename = image.getName();
+
+            while (Files.exists(rootLocation.resolve(newFilename))) {
+                String name = newFilename.replace("." + extension, "");
+
+                String suffix = Long.toString(System.currentTimeMillis());
+                suffix = suffix.substring(suffix.length() - 6);
+
+                newFilename = name + "_" + suffix + "." + extension;
+
             }
 
+            FileUtils.writeByteArrayToFile(rootLocation.resolve(newFilename).toFile(), byteImage);
+        } catch (IOException ex) {
+            throw new StorageException("Error en el almacenamiento del fichero: " + newFilename, ex);
+        }
+        return newFilename;
+    }
+
+    public String storeAndResizePostVideo(MultipartFile file) {
+
+        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String extension = StringUtils.getFilenameExtension(filename);
+        String newFilename = "";
+
+        try {
+            byte[] byteImage = compressor.compressPostVideo(file);
+
+            File image = new File(file.getOriginalFilename());
+
+            newFilename = image.getName();
+
+            while (Files.exists(rootLocation.resolve(newFilename))) {
+                String name = newFilename.replace("." + extension, "");
+
+                String suffix = Long.toString(System.currentTimeMillis());
+                suffix = suffix.substring(suffix.length() - 6);
+
+                newFilename = name + "_" + suffix + "." + extension;
+
+            }
+
+            FileUtils.writeByteArrayToFile(rootLocation.resolve(newFilename).toFile(), byteImage);
         } catch (IOException ex) {
             throw new StorageException("Error en el almacenamiento del fichero: " + newFilename, ex);
         }
@@ -158,7 +211,12 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public void deleteFile(String filename) {
-        // Pendiente
+        Path file = load(filename);
+        try {
+            Files.delete(file);
+        } catch (IOException e) {
+            throw new StorageException("No se pudo borrar el fichero: " + filename, e);
+        }
     }
 
     @Override
