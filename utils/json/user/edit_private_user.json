@@ -1,0 +1,11 @@
+{
+  "full_name": "Un señor de Murcia",
+  "fecha_nacimiento": "1950-12-31",
+  "telefono": "666666666",
+  "direccion": "Calle de Murcia",
+  "email": "sr_murcia@gmail.com",
+  "nickname": "srMurcia",
+  "privacidad": "PRIVATE",
+  "password": "123456",
+  "verifyPassword": "123456"
+}

@@ -32,7 +32,7 @@ public class Post implements Serializable {
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "UUID")
     private UUID id;
 
-    private String titulo, descripcion, media, mediaResized;
+        private String titulo, descripcion, media, mediaResized;
 
     @CreatedDate
     private LocalDate fechaPublicacion;
