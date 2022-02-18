@@ -55,9 +55,31 @@
 						},
 						{
 							"name": "02 - Login User 02",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"pm.collectionVariables.set(\"token\", jsonData.token);\r",
+											"pm.collectionVariables.set(\"avatar\", jsonData.avatar);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
-								"method": "GET",
-								"header": []
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nickname\": \"emegege\",\r\n    \"password\": \"123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								}
 							},
 							"response": []
 						}
@@ -69,24 +91,92 @@
 						{
 							"name": "01 - Seguir a alguien",
 							"request": {
-								"method": "GET",
-								"header": []
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/follow/emegege",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"follow",
+										"emegege"
+									]
+								}
 							},
 							"response": []
 						},
 						{
 							"name": "02 - Aceptar Solicitud",
 							"request": {
-								"method": "GET",
-								"header": []
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/follow/accept/<<solicitud_id>>",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"follow",
+										"accept",
+										"<<solicitud_id>>"
+									]
+								}
 							},
 							"response": []
 						},
 						{
 							"name": "03 - Rechazar solicitud",
 							"request": {
-								"method": "GET",
-								"header": []
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/follow/decline/<<solicitud_id>>",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"follow",
+										"decline",
+										"<<solicitud_id>>"
+									]
+								}
 							},
 							"response": []
 						},
@@ -132,12 +222,12 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/efatu/Desktop/spring_api_miarma/logo_person.jpg"
+									"src": []
 								},
 								{
 									"key": "user",
 									"type": "file",
-									"src": "/C:/Users/efatu/Desktop/spring_api_miarma/register_user.json"
+									"src": []
 								}
 							]
 						},
@@ -159,8 +249,35 @@
 				{
 					"name": "01.2 - Nuevo User 02",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "user",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"register"
+							]
+						}
 					},
 					"response": []
 				},
@@ -374,7 +491,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/post/{postId}}",
+							"raw": "http://localhost:8080/post/{{postId}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -382,7 +499,7 @@
 							"port": "8080",
 							"path": [
 								"post",
-								"{postId}}"
+								"{{postId}}"
 							]
 						}
 					},
