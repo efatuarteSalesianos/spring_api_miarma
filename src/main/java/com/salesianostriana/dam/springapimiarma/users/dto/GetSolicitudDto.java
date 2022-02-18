@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.springapimiarma.users.dto;
 
-import com.salesianostriana.dam.springapimiarma.users.model.FollowPK;
 import com.salesianostriana.dam.springapimiarma.users.model.SolicitudPK;
 import lombok.*;
 

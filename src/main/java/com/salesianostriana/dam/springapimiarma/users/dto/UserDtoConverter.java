@@ -1,7 +1,6 @@
 package com.salesianostriana.dam.springapimiarma.users.dto;
 
 import com.salesianostriana.dam.springapimiarma.dto.PostDtoConverter;
-import com.salesianostriana.dam.springapimiarma.users.model.Follow;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

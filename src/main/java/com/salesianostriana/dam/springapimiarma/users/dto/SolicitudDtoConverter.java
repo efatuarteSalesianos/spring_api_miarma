@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.springapimiarma.users.dto;
 
-import com.salesianostriana.dam.springapimiarma.users.model.Follow;
 import com.salesianostriana.dam.springapimiarma.users.model.Solicitud;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

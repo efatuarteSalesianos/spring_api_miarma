@@ -7,7 +7,6 @@ import io.github.techgnious.dto.VideoFormats;
 import io.github.techgnious.exception.VideoException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 import org.imgscalr.Scalr;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

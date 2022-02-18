@@ -8,7 +8,6 @@ import com.salesianostriana.dam.springapimiarma.errores.modelo.ApiError;
 import com.salesianostriana.dam.springapimiarma.errores.modelo.ApiSubError;
 import com.salesianostriana.dam.springapimiarma.errores.modelo.ApiValidationSubError;
 import org.hibernate.validator.internal.engine.path.PathImpl;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

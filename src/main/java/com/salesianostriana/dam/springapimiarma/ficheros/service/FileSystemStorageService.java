@@ -7,7 +7,6 @@ import com.salesianostriana.dam.springapimiarma.ficheros.utils.MediaTypeUrlResou
 import com.salesianostriana.dam.springapimiarma.ficheros.utils.StorageProperties;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
-import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -16,9 +15,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;

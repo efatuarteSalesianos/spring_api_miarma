@@ -2,10 +2,8 @@ package com.salesianostriana.dam.springapimiarma.users.services;
 
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.SingleEntityNotFoundException;
 import com.salesianostriana.dam.springapimiarma.errores.excepciones.SolicitudAlreadyExistException;
-import com.salesianostriana.dam.springapimiarma.users.dto.GetFollowDto;
 import com.salesianostriana.dam.springapimiarma.users.dto.GetSolicitudDto;
 import com.salesianostriana.dam.springapimiarma.users.dto.SolicitudDtoConverter;
-import com.salesianostriana.dam.springapimiarma.users.model.Follow;
 import com.salesianostriana.dam.springapimiarma.users.model.Solicitud;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
 import com.salesianostriana.dam.springapimiarma.users.repositories.SolicitudRepository;
@@ -14,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-import static com.salesianostriana.dam.springapimiarma.users.model.ProfileType.PRIVATE;
 
 @Service
 public class SolicitudService {

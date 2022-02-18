@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.springapimiarma.users.repositories;
 
-import com.salesianostriana.dam.springapimiarma.users.model.Follow;
 import com.salesianostriana.dam.springapimiarma.users.model.Solicitud;
 import com.salesianostriana.dam.springapimiarma.users.model.SolicitudPK;
 import com.salesianostriana.dam.springapimiarma.users.model.UserEntity;
