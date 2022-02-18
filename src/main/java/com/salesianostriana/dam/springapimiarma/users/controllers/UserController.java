@@ -109,7 +109,7 @@ public class UserController {
                     content = @Content)
     })
     @PutMapping("/profile/me")
-    public GetUserDto editMyPrfile(@AuthenticationPrincipal UserEntity logueado, @RequestPart("save_user") SaveUserDto user, @RequestPart("file") MultipartFile file) {
+    public GetUserDto editMyProfile(@AuthenticationPrincipal UserEntity logueado, @RequestPart("save_user") SaveUserDto user, @RequestPart("file") MultipartFile file) {
         return userEntityService.editProfile(logueado, user, file);
     }
 
@@ -151,18 +151,18 @@ public class UserController {
 
     @Operation(summary = "Se rechaza la solicitud de seguimiento de un usuario")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204",
+            @ApiResponse(responseCode = "201",
                     description = "Se ha rechazado correctamente",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = UserEntity.class))}),
             @ApiResponse(responseCode = "400",
-                    description = "El usuario al que se intenta aceptar no existe",
+                    description = "El usuario al que se intenta rechazar no existe",
                     content = @Content),
             @ApiResponse(responseCode = "403",
                     description = "Acceso denegado",
                     content = @Content)
     })
-    @DeleteMapping("/follow/decline/{nick}")
+    @PostMapping("/follow/decline/{nick}")
     public GetFollowDto rechazarSolicitud(@PathVariable String nick, @AuthenticationPrincipal UserEntity user) {
         return followService.eliminarSolicitudSeguimiento(nick, user);
     }
